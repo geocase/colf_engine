@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 			// TODO: culling
 			// 4 sides
 			// 3 * 6
-			for(int face = 0; face < 4; ++face) { // face
+			for(int face = 0; face < 6; ++face) { // face
 				for(int index = 0; index < 6; ++index) { // inner face
 					for(int coord = 0; coord < 3; ++coord) { // coord
 						float k = unit_cube_vertices[(face * 18) + (index * 3) + coord];
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
 							break;
 						}
 						stretchyBufferPush(&(k), &world_vertices);
-						stretchyBufferPush(&(face_texture_coordinates[(index * 3) + coord]), &world_texture_coordinates);
+						stretchyBufferPush(&(face_texture_coordinates[(face * 18) + (index * 3) + coord]), &world_texture_coordinates);
 					}
 				}
 			}

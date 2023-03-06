@@ -15,14 +15,14 @@ const float unit_cube_vertices[] = {
 	0.0f, 1.0f, 1.0f,
 	0.0f, 0.0f, 1.0f,
 
-	0.0f, 1.0f, 1.0f, // east
+	0.0f, 1.0f, 1.0f, // west
 	0.0f, 1.0f, 0.0f,
 	0.0f, 0.0f, 0.0f,
 	0.0f, 0.0f, 0.0f,
 	0.0f, 0.0f, 1.0f,
 	0.0f, 1.0f, 1.0f,
 
-	1.0f, 1.0f, 1.0f, // west
+	1.0f, 1.0f, 1.0f, // east
 	1.0f, 1.0f, 0.0f,
 	1.0f, 0.0f, 0.0f,
 	1.0f, 0.0f, 0.0f,
@@ -45,12 +45,48 @@ const float unit_cube_vertices[] = {
 
 const size_t unit_cube_vertices_size = 108;
 const float face_texture_coordinates[] = {
+	1.0f, 0.0f, 0.0f, // north
 	0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+	1.0f, 1.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+
+	0.0f, 0.0f, 0.0f, // south
 	1.0f, 0.0f, 0.0f,
 	1.0f, 1.0f, 0.0f,
 	1.0f, 1.0f, 0.0f,
 	0.0f, 1.0f, 0.0f,
 	0.0f, 0.0f, 0.0f,
+
+	1.0f, 1.0f, 0.0f, // west
+	0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+	1.0f, 1.0f, 0.0f,
+
+	0.0f, 1.0f, 0.0f, // east
+	1.0f, 1.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+
+
+	1.0f, 1.0f, 0.0f, // bottom
+	0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+	1.0f, 1.0f, 0.0f,
+
+	0.0f, 1.0f, 0.0f, // top
+	1.0f, 1.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
 };
 
 const size_t unit_cube_face_size = 6;

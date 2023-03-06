@@ -5,7 +5,7 @@
 
 const float unit_cube_vertices[108];
 const size_t unit_cube_vertices_size;
-const float face_texture_coordinates[3 * 6];
+const float face_texture_coordinates[108];
 
 const size_t unit_cube_face_size;
 const float unit_cube_south_vertices[3 * 6];
