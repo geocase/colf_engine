@@ -1,0 +1,7 @@
+﻿---
+TabWidth: '4'
+UseTab: 'ForContinuationAndIndentation'
+IndentWidth: 4
+ColumnLimit: 0
+
+...
