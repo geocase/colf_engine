@@ -10,11 +10,11 @@ typedef struct {
 	size_t size;
 	size_t type_size;
 	size_t index_pointer;
-	void* buffer;
+	void *buffer;
 } StretchyBuffer_t;
 
 StretchyBuffer_t stretchyBufferInit(size_t size_of_type);
-void stretchyBufferPush(void* data, StretchyBuffer_t* sb);
-void* stretchyBufferAt(size_t index, StretchyBuffer_t* sb);
+void stretchyBufferPush(void *data, StretchyBuffer_t *sb);
+void *stretchyBufferAt(size_t index, StretchyBuffer_t *sb);
 
 #endif // PLATFORMER_STRETCHY_BUFFER_H

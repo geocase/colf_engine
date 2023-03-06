@@ -14,19 +14,17 @@ StretchyBuffer_t stretchyBufferInit(size_t size_of_type) {
 	return out;
 }
 
-void stretchyBufferPush(void* data, StretchyBuffer_t* sb) {
-	memcpy((char*)sb->buffer + (sb->index_pointer * sb->type_size), data, sb->type_size);
+void stretchyBufferPush(void *data, StretchyBuffer_t *sb) {
+	memcpy((char *)sb->buffer + (sb->index_pointer * sb->type_size), data, sb->type_size);
 	sb->index_pointer += 1; // adjust everything after;
 	sb->length += 1;
-	if(sb->length == sb->size) {
+	if (sb->length == sb->size) {
 		sb->size *= 2;
 		sb->buffer = realloc(sb->buffer, sb->type_size * sb->size);
 	}
 	return;
 }
 
-void* stretchyBufferAt(size_t index, StretchyBuffer_t* sb) {
-	return (void*)((char*)sb->buffer + ((index % sb->length) * sb->type_size));
+void *stretchyBufferAt(size_t index, StretchyBuffer_t *sb) {
+	return (void *)((char *)sb->buffer + ((index % sb->length) * sb->type_size));
 }
-
-

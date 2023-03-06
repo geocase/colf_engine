@@ -1,5 +1,4 @@
 #include "model.h"
-
 const float unit_cube_vertices[] = {
 	0.0f, 0.0f, 0.0f, // north
 	1.0f, 0.0f, 0.0f,
@@ -73,7 +72,6 @@ const float face_texture_coordinates[] = {
 	0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f,
 
-
 	1.0f, 1.0f, 0.0f, // bottom
 	0.0f, 1.0f, 0.0f,
 	0.0f, 0.0f, 0.0f,
@@ -86,8 +84,7 @@ const float face_texture_coordinates[] = {
 	1.0f, 0.0f, 0.0f,
 	1.0f, 0.0f, 0.0f,
 	0.0f, 0.0f, 0.0f,
-	0.0f, 1.0f, 0.0f,
-};
+	0.0f, 1.0f, 0.0f};
 
 const size_t unit_cube_face_size = 6;
 

@@ -1,8 +1,8 @@
 #include <cglm/cglm.h>
 
+#include "renderer.h"
 #include <SDL.h>
 #include <glad/glad.h>
-#include "renderer.h"
 
 void initRenderer(RenderData_t *data) {
 	glm_mat4_identity(data->projection);

@@ -1,7 +1,7 @@
 #ifndef PLATFORMER_LEVEL_H
 #define PLATFORMER_LEVEL_H
-#include <stdbool.h>
 #include "utils.h"
+#include <stdbool.h>
 
 #define MAP_SIZE 16
 

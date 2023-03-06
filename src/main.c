@@ -16,11 +16,11 @@
 #include "graphics/model.h"
 #include "graphics/renderer.h"
 #include "graphics/shader.h"
+#include "graphics/sprite.h"
 #include "graphics/texture.h"
 #include "level.h"
 #include "stretchy_buffer.h"
 #include "utils.h"
-#include "graphics/sprite.h"
 
 const char *vert = "#version 330 core\n"
 				   "layout (location = 0) in vec3 pos;"
@@ -42,7 +42,6 @@ const char *frag = "#version 330 core\n"
 				   "void main() {"
 				   "	FragColor = texture(inTexture, tex_coord);"
 				   "}";
-
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -74,16 +73,16 @@ int main(int argc, char **argv) {
 			// TODO: culling
 			// 4 sides
 			// 3 * 6
-			for(int face = 0; face < 6; ++face) { // face
-				for(int index = 0; index < 6; ++index) { // inner face
-					for(int coord = 0; coord < 3; ++coord) { // coord
+			for (int face = 0; face < 6; ++face) {            // face
+				for (int index = 0; index < 6; ++index) {     // inner face
+					for (int coord = 0; coord < 3; ++coord) { // coord
 						float k = unit_cube_vertices[(face * 18) + (index * 3) + coord];
-						switch(coord) {
+						switch (coord) {
 						case 0:
 							k += x;
 							break;
 						case 1:
-							if(!map.data[MAP_SIZE * y + x].solid) {
+							if (!map.data[MAP_SIZE * y + x].solid) {
 								k -= 1;
 							}
 							break;
@@ -99,10 +98,6 @@ int main(int argc, char **argv) {
 		}
 	}
 
-
-
-
-
 	// audio junk
 	//	Mix_Init(MIX_INIT_OGG);
 	//	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
@@ -116,8 +111,6 @@ int main(int argc, char **argv) {
 	//	Mix_Volume(1, 1);
 	//	Mix_SetPanning(0, 0, 0);
 	//	Mix_PlayChannel(0, beep, -1);
-
-
 
 	RenderSettings_t render_settings;
 	RenderData_t render_data;
@@ -324,28 +317,28 @@ int main(int argc, char **argv) {
 
 		glDrawArrays(GL_TRIANGLES, 0, world_vertices.length / 3);
 
-//
-//		// build geometry
-//		float scale = 10;
-//		float offset = -100;
-//		for (int y = 0; y < MAP_SIZE; ++y) {
-//			for (int x = 0; x < MAP_SIZE; ++x) {
-//				glm_mat4_identity(model);
-//				RGBColor_t c = map.data[MAP_SIZE * y + x].color;
-//				glUniform3f(glGetUniformLocation(flat_shader.program, "c"), normalize(0, 255, c.r), normalize(0, 255, c.g), normalize(0, 255, c.b));
-//				if (map.data[MAP_SIZE * y + x].solid) {
-//					glm_translate(model, (vec3){x * scale + offset, -(scale / 2.0f), y * scale + offset});
-//					glm_scale_uni(model, 10);
-//				} else {
-//					glm_translate(model, (vec3){x * scale + offset, -(scale * 1.5f), y * scale + offset});
-//					glm_scale_uni(model, 10);
-//				}
-//
-//				glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "model"), 1, GL_FALSE, model);
-//				//				glDrawArrays(GL_TRIANGLES, 0, 108 / 3);
-//				glDrawArrays(GL_TRIANGLES, 0, 36);
-//			}
-//		}
+		//
+		//		// build geometry
+		//		float scale = 10;
+		//		float offset = -100;
+		//		for (int y = 0; y < MAP_SIZE; ++y) {
+		//			for (int x = 0; x < MAP_SIZE; ++x) {
+		//				glm_mat4_identity(model);
+		//				RGBColor_t c = map.data[MAP_SIZE * y + x].color;
+		//				glUniform3f(glGetUniformLocation(flat_shader.program, "c"), normalize(0, 255, c.r), normalize(0, 255, c.g), normalize(0, 255, c.b));
+		//				if (map.data[MAP_SIZE * y + x].solid) {
+		//					glm_translate(model, (vec3){x * scale + offset, -(scale / 2.0f), y * scale + offset});
+		//					glm_scale_uni(model, 10);
+		//				} else {
+		//					glm_translate(model, (vec3){x * scale + offset, -(scale * 1.5f), y * scale + offset});
+		//					glm_scale_uni(model, 10);
+		//				}
+		//
+		//				glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "model"), 1, GL_FALSE, model);
+		//				//				glDrawArrays(GL_TRIANGLES, 0, 108 / 3);
+		//				glDrawArrays(GL_TRIANGLES, 0, 36);
+		//			}
+		//		}
 
 		SDL_GL_SwapWindow(render_data.window);
 

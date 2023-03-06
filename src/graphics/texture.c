@@ -48,7 +48,7 @@ void loadImage(const char *path, TextureData_t *out) {
 	return;
 }
 
-glTexture_t pushTextureToGPU(TextureData_t* text) {
+glTexture_t pushTextureToGPU(TextureData_t *text) {
 	unsigned int texture_index;
 	glGenTextures(1, &texture_index);
 	glBindTexture(GL_TEXTURE_2D, texture_index);
