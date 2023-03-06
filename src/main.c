@@ -73,7 +73,45 @@ int main(int argc, char **argv) {
 			// TODO: culling
 			// 4 sides
 			// 3 * 6
-			for (int face = 0; face < 6; ++face) {            // face
+			bool face_visible[6];
+			memset(face_visible, 0, sizeof(bool) * 6);
+			if (map.data[MAP_SIZE * y + x].solid) {
+				// north face
+				if (y - 1 >= 0) {
+					if (!map.data[MAP_SIZE * (y - 1) + x].solid) {
+						face_visible[0] = true;
+					}
+				}
+				// south face
+				if (y + 1 < MAP_SIZE) {
+					if (!map.data[MAP_SIZE * (y + 1) + x].solid) {
+						face_visible[1] = true;
+					}
+				}
+
+				// west face
+				if (x - 1 >= 0) {
+					if (!map.data[MAP_SIZE * (y) + x - 1].solid) {
+						face_visible[2] = true;
+					}
+				}
+				// east face
+				if (x + 1 < MAP_SIZE) {
+					if (!map.data[MAP_SIZE * (y) + x + 1].solid) {
+						face_visible[3] = true;
+					}
+				}
+			}
+
+			if (!map.data[MAP_SIZE * (y) + x].solid) {
+				face_visible[4] = true;
+				face_visible[5] = true;
+			}
+
+			for (int face = 0; face < 6; ++face) { // face
+				if (!face_visible[face]) {
+					continue;
+				}
 				for (int index = 0; index < 6; ++index) {     // inner face
 					for (int coord = 0; coord < 3; ++coord) { // coord
 						float k = unit_cube_vertices[(face * 18) + (index * 3) + coord];
@@ -84,6 +122,9 @@ int main(int argc, char **argv) {
 						case 1:
 							if (!map.data[MAP_SIZE * y + x].solid) {
 								k -= 1;
+							}
+							if(face == 4) {
+								k += 2;
 							}
 							break;
 						case 2:
@@ -157,7 +198,7 @@ int main(int argc, char **argv) {
 	glm_mat4_identity(model);
 	glm_rotate(model, 45, (vec3){0, 1, 0});
 
-	vec3 camera_position = {0, 0, -10.0f};
+	vec3 camera_position = {0, -5.0f, 0.0f};
 
 	SDL_Event ev;
 	bool run = true;
@@ -300,12 +341,16 @@ int main(int argc, char **argv) {
 		glm_rotate(render_data.camera, angle, (vec3){0, 1, 0});
 		glm_translate(render_data.camera, camera_position);
 
-		drawSpriteBillboard(ss, &render_data, 100, -5, 100);
+		drawSpriteBillboard(ss, &render_data, 100, 5, 100);
+		drawSpriteBillboard(ss, &render_data, 110, 5, 100);
+		drawSpriteBillboard(ss, &render_data, 120, 5, 100);
+		drawSpriteBillboard(ss, &render_data, 130, 5, 100);
+		drawSpriteBillboard(ss, &render_data, 140, 5, 100);
 
 		mat4 model;
 		glm_mat4_identity(model);
 		glm_scale(model, (vec3){10, 10, 10});
-		glm_translate(model, (vec3){0, -1, 0});
+		glm_translate(model, (vec3){0, 0, 0});
 
 		glBindTexture(GL_TEXTURE_2D, sam.index);
 
