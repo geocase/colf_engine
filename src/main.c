@@ -24,7 +24,7 @@
 
 const char *vert = "#version 330 core\n"
 				   "layout (location = 0) in vec3 pos;"
-				   "layout (location = 1) in vec2 text;"
+				   "layout (location = 1) in vec3 text;"
 				   "uniform mat4 projection;"
 				   "uniform mat4 model;"
 				   "uniform mat4 view;"
@@ -32,7 +32,7 @@ const char *vert = "#version 330 core\n"
 				   "out vec2 tex_coord;"
 				   "void main() {"
 				   "	gl_Position = projection * view * model * vec4(pos, 1.0);"
-				   "	tex_coord = text;" // temp
+				   "	tex_coord = text.xy;" // temp
 				   "}";
 
 const char *frag = "#version 330 core\n"
@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, world_texture_coords_buffer);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 	glEnableVertexAttribArray(1);
 
 	// texture
