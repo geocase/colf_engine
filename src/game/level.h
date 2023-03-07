@@ -2,9 +2,9 @@
 #define PLATFORMER_LEVEL_H
 #include <stdbool.h>
 
-#include "utils.h"
-#include "stretchy_buffer.h"
+#include "containers/stretchy_buffer.h"
 #include "graphics/model.h"
+#include "utils.h"
 
 #define MAP_SIZE 16
 

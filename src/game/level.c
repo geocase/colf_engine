@@ -1,9 +1,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "level.h"
+#include "containers/stretchy_buffer.h"
 #include "graphics/model.h"
-#include "stretchy_buffer.h"
+#include "level.h"
 
 TexturedModel_t generateLevelGeometry(Map_t *map) {
 	StretchyBuffer_t world_vertices = stretchyBufferInit(sizeof(float));

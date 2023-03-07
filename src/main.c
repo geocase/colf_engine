@@ -13,13 +13,13 @@
 #include <string.h>
 #include <time.h>
 
+#include "containers/stretchy_buffer.h"
+#include "game/level.h"
 #include "graphics/model.h"
 #include "graphics/renderer.h"
 #include "graphics/shader.h"
 #include "graphics/sprite.h"
 #include "graphics/texture.h"
-#include "level.h"
-#include "stretchy_buffer.h"
 #include "utils.h"
 
 const char *vert = "#version 330 core\n"
@@ -272,6 +272,8 @@ int main(int argc, char **argv) {
 		glm_mat4_identity(render_data.camera);
 		glm_rotate(render_data.camera, angle, (vec3){0, 1, 0});
 		glm_translate(render_data.camera, camera_position);
+
+		drawSpriteBillboard(ss, &render_data, 0, 0 , 0);
 
 		drawSpriteBillboard(ss, &render_data, 100, 5, 100);
 		drawSpriteBillboard(ss, &render_data, 110, 5, 100);
