@@ -32,7 +32,7 @@ const char *vert = "#version 330 core\n"
 				   "out vec2 tex_coord;"
 				   "void main() {"
 				   "	gl_Position = projection * view * model * vec4(pos, 1.0);"
-				   "	tex_coord = text.xy;" // temp
+				   "	tex_coord = vec2(((text.x + text.z) / 3), text.y);" // temp
 				   "}";
 
 const char *frag = "#version 330 core\n"
@@ -55,11 +55,15 @@ int main(int argc, char **argv) {
 	memset(&map, 0, sizeof(Map_t));
 	for (int y = 0; y < MAP_SIZE; ++y) {
 		for (int x = 0; x < MAP_SIZE; ++x) {
+			for(int i = 0; i < 6; ++i) {
+				map.data[MAP_SIZE * y + x].tex_index[i] = rand() % 3;
+			}
 			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4 && x < 8)) {
 				map.data[MAP_SIZE * y + x].solid = true;
 				map.data[MAP_SIZE * y + x].color.r = rand();
 				map.data[MAP_SIZE * y + x].color.g = rand();
 				map.data[MAP_SIZE * y + x].color.b = rand();
+
 			}
 		}
 	}
@@ -115,6 +119,7 @@ int main(int argc, char **argv) {
 				for (int index = 0; index < 6; ++index) {     // inner face
 					for (int coord = 0; coord < 3; ++coord) { // coord
 						float k = unit_cube_vertices[(face * 18) + (index * 3) + coord];
+						float tex = face_texture_coordinates[(face * 18) + (index * 3) + coord];
 						switch (coord) {
 						case 0:
 							k += x;
@@ -129,10 +134,11 @@ int main(int argc, char **argv) {
 							break;
 						case 2:
 							k += y;
+							tex += map.data[MAP_SIZE * y + x].tex_index[face];
 							break;
 						}
 						stretchyBufferPush(&(k), &world_vertices);
-						stretchyBufferPush(&(face_texture_coordinates[(face * 18) + (index * 3) + coord]), &world_texture_coordinates);
+						stretchyBufferPush(&(tex), &world_texture_coordinates);
 					}
 				}
 			}
@@ -191,7 +197,7 @@ int main(int argc, char **argv) {
 	glTexture_t ss = pushTextureToGPU(&ss_pixels);
 
 	TextureData_t sam_pixels;
-	loadImage("sam.png", &sam_pixels);
+	loadImage("wall_temp.png", &sam_pixels);
 	glTexture_t sam = pushTextureToGPU(&sam_pixels);
 
 	mat4 model;

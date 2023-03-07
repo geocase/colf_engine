@@ -8,6 +8,7 @@
 typedef struct {
 	bool solid;
 	RGBColor_t color;
+	int tex_index[6];
 } Tile_t;
 
 typedef struct {
