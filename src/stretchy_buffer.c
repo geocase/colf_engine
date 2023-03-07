@@ -28,3 +28,10 @@ void stretchyBufferPush(void *data, StretchyBuffer_t *sb) {
 void *stretchyBufferAt(size_t index, StretchyBuffer_t *sb) {
 	return (void *)((char *)sb->buffer + ((index % sb->length) * sb->type_size));
 }
+
+void stretchyBufferClear(StretchyBuffer_t* sb) {
+	memset(sb->buffer, 0, sb->type_size * sb->size);
+	sb->length = 0;
+	sb->index_pointer = 0;
+	return;
+}
