@@ -1,7 +1,10 @@
 #ifndef PLATFORMER_LEVEL_H
 #define PLATFORMER_LEVEL_H
-#include "utils.h"
 #include <stdbool.h>
+
+#include "utils.h"
+#include "stretchy_buffer.h"
+#include "graphics/model.h"
 
 #define MAP_SIZE 16
 
@@ -14,5 +17,7 @@ typedef struct {
 typedef struct {
 	Tile_t data[MAP_SIZE * MAP_SIZE];
 } Map_t;
+
+TexturedModel_t generateLevelGeometry(Map_t *map);
 
 #endif // PLATFORMER_LEVEL_H
