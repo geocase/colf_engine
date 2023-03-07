@@ -3,6 +3,14 @@
 
 #include <cglm/cglm.h>
 
+typedef struct {
+	float* vertices;
+	float* texture_coordinates;
+	size_t tris;
+} TexturedModel_t;
+
+const TexturedModel_t unit_cube;
+
 const float unit_cube_vertices[108];
 const size_t unit_cube_vertices_size;
 const float face_texture_coordinates[108];
