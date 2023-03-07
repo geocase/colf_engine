@@ -14,6 +14,7 @@
 #include <time.h>
 
 #include "containers/stretchy_buffer.h"
+#include "game/entity_functions.h"
 #include "game/level.h"
 #include "graphics/model.h"
 #include "graphics/renderer.h"
@@ -58,7 +59,7 @@ int main(int argc, char **argv) {
 			for (int i = 0; i < 6; ++i) {
 				map.data[MAP_SIZE * y + x].tex_index[i] = rand() % 3;
 			}
-			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4 && x < 8)) {
+			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x == 5)) {
 				map.data[MAP_SIZE * y + x].solid = true;
 				map.data[MAP_SIZE * y + x].color.r = rand();
 				map.data[MAP_SIZE * y + x].color.g = rand();
@@ -132,7 +133,7 @@ int main(int argc, char **argv) {
 	glm_mat4_identity(model);
 	glm_rotate(model, 45, (vec3){0, 1, 0});
 
-	vec3 camera_position = {0, -5.0f, 0.0f};
+	vec3 camera_position = {-140, -5.0f, -80};
 
 	SDL_Event ev;
 	bool run = true;
@@ -142,18 +143,21 @@ int main(int argc, char **argv) {
 	unsigned long frame_end = SDL_GetTicks64();
 	float delta = 1.0f / 60.0f;
 	unsigned long accumulated_frame_time = 0;
-	double speed = 50;
+	double speed = 1;
 
-	float angle = M_PI;
+	float angle = 0;
 
 	bool input[9] = {
 		false, false, false, false, false, false, false, false};
 
 	billboardSpriteInit();
 
-	vec2 bullet_position = {0, 0};
+	Entity_t bullet_entity = {.position = {0, 0}};
+	bullet_entity.radius = .5;
 	bool bullet_shot = false;
-	float bullet_angle = 0.0f;
+
+	Entity_t ss_officer = {.position = {10, 6.5}, .angle = 0, .radius = .3};
+	Entity_t player = {.position = {1.5, 1.5}, .angle = 0, .radius = .3};
 
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
@@ -206,10 +210,12 @@ int main(int argc, char **argv) {
 					input[8] = true;
 					// SHOOT BULLET
 					{
-						bullet_position[0] = -camera_position[0];
-						bullet_position[1] = -camera_position[2];
+						bullet_entity.position[0] = player.position[0];
+						bullet_entity.position[1] = player.position[1];
 						bullet_shot = true;
-						bullet_angle = angle;
+						bullet_entity.angle = player.angle;
+						printf("%f\n", angle);
+						fflush(stdout);
 					}
 					break;
 				}
@@ -249,61 +255,57 @@ int main(int argc, char **argv) {
 		}
 
 		while (accumulated_frame_time > 16) {
-			if(bullet_shot) {
-				bullet_position[1] -= cosf(bullet_angle) * 5 * delta;
-				bullet_position[0] -= sinf(bullet_angle) * 5 * delta;
+			//			entityWalkForward(&ss_officer, &map, .5 * delta);
+			entityWalkTowardsPoint(&ss_officer, &map, .5 * delta, player.position);
+			if (bullet_shot) {
+				entityWalkForward(&bullet_entity, &map, .5 * delta);
 			}
 			//			printf("INPUT\n");
 			if (input[0]) {
-				camera_position[2] += cosf(angle) * speed * delta;
-				camera_position[0] += sinf(angle) * speed * delta;
+				entityWalk(&player, &map, speed * delta, player.angle);
 			}
 
 			if (input[1]) {
-				camera_position[2] -= cosf(angle) * speed * delta;
-				camera_position[0] -= sinf(angle) * speed * delta;
+				entityWalk(&player, &map, speed * delta, player.angle + M_PI);
 			}
 
 			if (input[2]) {
-				camera_position[2] -= cosf(angle + M_PI_2) * speed * delta;
-				camera_position[0] -= sinf(angle + M_PI_2) * speed * delta;
+				entityWalk(&player, &map, speed * delta, player.angle + M_PI_2);
 			}
 
 			if (input[3]) {
-				camera_position[2] += cosf(angle + M_PI_2) * speed * delta;
-				camera_position[0] += sinf(angle + M_PI_2) * speed * delta;
+				entityWalk(&player, &map, speed * delta, player.angle - M_PI_2);
 			}
 			if (input[4]) {
-				angle -= 1 * delta;
+				player.angle += 1 * delta;
 			}
 			if (input[5]) {
-				angle += 1 * delta;
+				player.angle -= 1 * delta;
 			}
 
-			if (input[6]) {
-				camera_position[1] -= speed * delta;
-			}
-			if (input[7]) {
-				camera_position[1] += speed * delta;
-			}
+			//			if (input[6]) {
+			//				camera_position[1] -= speed * delta;
+			//			}
+			//			if (input[7]) {
+			//				camera_position[1] += speed * delta;
+			//			}
 			accumulated_frame_time -= 16;
 		}
-//		generateLevelGeometry(&map);
+		//		generateLevelGeometry(&map);
 
 		glClearColor(.5, .5, .5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		camera_position[0] = -player.position[0] * 10;
+		camera_position[2] = -player.position[1] * 10;
+
 		glm_mat4_identity(render_data.camera);
-		glm_rotate(render_data.camera, angle, (vec3){0, -1, 0});
+		glm_rotate(render_data.camera, -player.angle - M_PI_2, (vec3){0, -1, 0});
 		glm_translate(render_data.camera, camera_position);
 
-		drawSpriteBillboard(bullet, &render_data, bullet_position[0], 0 , bullet_position[1]);
+		drawSpriteBillboard(bullet, &render_data, bullet_entity.position[0] * 10, 5, bullet_entity.position[1] * 10);
 
-		drawSpriteBillboard(ss, &render_data, 100, 5, 100);
-		drawSpriteBillboard(ss, &render_data, 110, 5, 100);
-		drawSpriteBillboard(ss, &render_data, 120, 5, 100);
-		drawSpriteBillboard(ss, &render_data, 130, 5, 100);
-		drawSpriteBillboard(ss, &render_data, 140, 5, 100);
+		drawSpriteBillboard(ss, &render_data, ss_officer.position[0] * 10, 5, ss_officer.position[1] * 10);
 
 		mat4 model;
 		glm_mat4_identity(model);

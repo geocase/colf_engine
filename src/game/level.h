@@ -5,9 +5,11 @@
 #include "containers/stretchy_buffer.h"
 #include "graphics/model.h"
 #include "utils.h"
+
 #include "entity.h"
 
 #define MAP_SIZE 16
+
 
 typedef struct {
 	bool solid;
@@ -16,7 +18,7 @@ typedef struct {
 } Tile_t;
 
 typedef struct {
-	Entity_t entity_placements;
+	Entity_t* entity_placements;
 	Tile_t data[MAP_SIZE * MAP_SIZE];
 } Map_t;
 
