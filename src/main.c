@@ -124,6 +124,10 @@ int main(int argc, char **argv) {
 	loadImage("wall_temp.png", &sam_pixels);
 	glTexture_t sam = pushTextureToGPU(&sam_pixels);
 
+	TextureData_t bullet_pixels;
+	loadImage("bullet.png", &bullet_pixels);
+	glTexture_t bullet = pushTextureToGPU(&bullet_pixels);
+
 	mat4 model;
 	glm_mat4_identity(model);
 	glm_rotate(model, 45, (vec3){0, 1, 0});
@@ -140,12 +144,16 @@ int main(int argc, char **argv) {
 	unsigned long accumulated_frame_time = 0;
 	double speed = 50;
 
-	float angle = 0;
+	float angle = M_PI;
 
-	bool input[8] = {
+	bool input[9] = {
 		false, false, false, false, false, false, false, false};
 
 	billboardSpriteInit();
+
+	vec2 bullet_position = {0, 0};
+	bool bullet_shot = false;
+	float bullet_angle = 0.0f;
 
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
@@ -194,6 +202,16 @@ int main(int argc, char **argv) {
 				case SDLK_LCTRL:
 					input[7] = true;
 					break;
+				case SDLK_SPACE:
+					input[8] = true;
+					// SHOOT BULLET
+					{
+						bullet_position[0] = -camera_position[0];
+						bullet_position[1] = -camera_position[2];
+						bullet_shot = true;
+						bullet_angle = angle;
+					}
+					break;
 				}
 				break;
 			case SDL_KEYUP: {
@@ -222,37 +240,44 @@ int main(int argc, char **argv) {
 				case SDLK_LCTRL:
 					input[7] = false;
 					break;
+				case SDLK_SPACE:
+					input[8] = false;
+					break;
 				}
 			} break;
 			}
 		}
 
 		while (accumulated_frame_time > 16) {
+			if(bullet_shot) {
+				bullet_position[1] -= cosf(bullet_angle) * 5 * delta;
+				bullet_position[0] -= sinf(bullet_angle) * 5 * delta;
+			}
 			//			printf("INPUT\n");
 			if (input[0]) {
-				camera_position[2] += cosf(-angle) * speed * delta;
-				camera_position[0] += sinf(-angle) * speed * delta;
+				camera_position[2] += cosf(angle) * speed * delta;
+				camera_position[0] += sinf(angle) * speed * delta;
 			}
 
 			if (input[1]) {
-				camera_position[2] -= cosf(-angle) * speed * delta;
-				camera_position[0] -= sinf(-angle) * speed * delta;
+				camera_position[2] -= cosf(angle) * speed * delta;
+				camera_position[0] -= sinf(angle) * speed * delta;
 			}
 
 			if (input[2]) {
-				camera_position[2] -= cosf(-angle + M_PI_2) * speed * delta;
-				camera_position[0] -= sinf(-angle + M_PI_2) * speed * delta;
+				camera_position[2] -= cosf(angle + M_PI_2) * speed * delta;
+				camera_position[0] -= sinf(angle + M_PI_2) * speed * delta;
 			}
 
 			if (input[3]) {
-				camera_position[2] += cosf(-angle + M_PI_2) * speed * delta;
-				camera_position[0] += sinf(-angle + M_PI_2) * speed * delta;
+				camera_position[2] += cosf(angle + M_PI_2) * speed * delta;
+				camera_position[0] += sinf(angle + M_PI_2) * speed * delta;
 			}
 			if (input[4]) {
-				angle += 1 * delta;
+				angle -= 1 * delta;
 			}
 			if (input[5]) {
-				angle -= 1 * delta;
+				angle += 1 * delta;
 			}
 
 			if (input[6]) {
@@ -261,7 +286,6 @@ int main(int argc, char **argv) {
 			if (input[7]) {
 				camera_position[1] += speed * delta;
 			}
-
 			accumulated_frame_time -= 16;
 		}
 //		generateLevelGeometry(&map);
@@ -270,10 +294,10 @@ int main(int argc, char **argv) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm_mat4_identity(render_data.camera);
-		glm_rotate(render_data.camera, angle, (vec3){0, 1, 0});
+		glm_rotate(render_data.camera, angle, (vec3){0, -1, 0});
 		glm_translate(render_data.camera, camera_position);
 
-		drawSpriteBillboard(ss, &render_data, 0, 0 , 0);
+		drawSpriteBillboard(bullet, &render_data, bullet_position[0], 0 , bullet_position[1]);
 
 		drawSpriteBillboard(ss, &render_data, 100, 5, 100);
 		drawSpriteBillboard(ss, &render_data, 110, 5, 100);
@@ -294,7 +318,7 @@ int main(int argc, char **argv) {
 		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "projection"), 1, GL_FALSE, render_data.projection);
 		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "model"), 1, GL_FALSE, model);
 
-		glDrawArrays(GL_TRIANGLES, 0, world.tris);
+//		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
 		//
 		//		// build geometry
