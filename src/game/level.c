@@ -82,8 +82,6 @@ TexturedModel_t generateLevelGeometry(Map_t *map) {
 		}
 	}
 
-	// TODO: free stretchy buffers;
-
 	TexturedModel_t model;
 	model.tris = world_vertices.length / 3;
 	model.vertices = malloc(sizeof(float) * model.tris * 3);
@@ -91,6 +89,9 @@ TexturedModel_t generateLevelGeometry(Map_t *map) {
 
 	memcpy(model.vertices, world_vertices.buffer, sizeof(float) * model.tris * 3);
 	memcpy(model.texture_coordinates, world_texture_coordinates.buffer, sizeof(float) * model.tris * 3);
+
+	stretchyBufferFree(&world_vertices);
+	stretchyBufferFree(&world_texture_coordinates);
 
 	return model;
 }
