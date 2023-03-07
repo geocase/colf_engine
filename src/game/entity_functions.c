@@ -5,11 +5,20 @@
 bool entityCanMove(Entity_t* entity, Map_t* map, float angle, float distance) {
 	float x_delta = cosf(angle);
 	float y_delta = sinf(angle);
-	vec2 new_position = {entity->position[0] + x_delta * distance + x_delta * entity->radius, entity->position[1] + y_delta * distance + y_delta * entity->radius};
-	int rounded_x = (int)new_position[0];
-	int rounded_y = (int)new_position[1];
+	float temp_distance = min(distance / 2.0f, 0.5f);
+	while(temp_distance <= distance) {
+		vec2 new_position = {entity->position[0] + x_delta * temp_distance + x_delta * entity->radius,
+							 entity->position[1] + y_delta * temp_distance + y_delta * entity->radius};
+		int rounded_x = (int)new_position[0];
+		int rounded_y = (int)new_position[1];
+		if(map->data[MAP_SIZE * rounded_y + rounded_x].solid) {
+			return false;
+		}
 
-	return !(map->data[MAP_SIZE * rounded_y + rounded_x].solid);
+		temp_distance += .4;
+	}
+
+	return true;
 }
 
 void entityWalkTowardsPoint(Entity_t* entity, Map_t* map, float speed, vec2 position) {
