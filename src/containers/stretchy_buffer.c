@@ -10,7 +10,6 @@ StretchyBuffer_t stretchyBufferInit(size_t size_of_type) {
 	out.type_size = size_of_type;
 	out.index_pointer = 0;
 	out.buffer = malloc(out.type_size * out.size);
-
 	return out;
 }
 
@@ -33,5 +32,11 @@ void stretchyBufferClear(StretchyBuffer_t* sb) {
 	memset(sb->buffer, 0, sb->type_size * sb->size);
 	sb->length = 0;
 	sb->index_pointer = 0;
+	return;
+}
+
+void stretchyBufferFree(StretchyBuffer_t* sb) {
+	free(sb->buffer);
+	memset(sb, 0, sizeof(StretchyBuffer_t));
 	return;
 }
