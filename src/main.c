@@ -59,11 +59,13 @@ int main(int argc, char **argv) {
 			for (int i = 0; i < 6; ++i) {
 				map.data[MAP_SIZE * y + x].tex_index[i] = rand() % 3;
 			}
-			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x == 5)) {
-				map.data[MAP_SIZE * y + x].solid = true;
-				map.data[MAP_SIZE * y + x].color.r = rand();
-				map.data[MAP_SIZE * y + x].color.g = rand();
-				map.data[MAP_SIZE * y + x].color.b = rand();
+			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4  && x < 8)) {
+				if(!(x == 6 && y < 7)) {
+					map.data[MAP_SIZE * y + x].solid = true;
+					map.data[MAP_SIZE * y + x].color.r = rand();
+					map.data[MAP_SIZE * y + x].color.g = rand();
+					map.data[MAP_SIZE * y + x].color.b = rand();
+				}
 			}
 		}
 	}
@@ -157,7 +159,7 @@ int main(int argc, char **argv) {
 	bool bullet_shot = false;
 
 	Entity_t ss_officer = {.position = {10, 6.5}, .angle = 0, .radius = .3};
-	Entity_t player = {.position = {1.5, 1.5}, .angle = 0, .radius = .3};
+	Entity_t player = {.position = {1.5, 1.5}, .angle = 0, .radius = .2};
 
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
@@ -294,7 +296,7 @@ int main(int argc, char **argv) {
 		//		generateLevelGeometry(&map);
 
 		glClearColor(.5, .5, .5, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
 		camera_position[0] = -player.position[0] * 10;
 		camera_position[2] = -player.position[1] * 10;
