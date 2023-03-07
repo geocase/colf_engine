@@ -2,8 +2,8 @@
 // Created by csg on 3/5/2023.
 //
 
-#ifndef PLATFORMER_STRETCHY_BUFFER_H
-#define PLATFORMER_STRETCHY_BUFFER_H
+#ifndef COLF_STRETCHY_BUFFER_H
+#define COLF_STRETCHY_BUFFER_H
 
 typedef struct {
 	size_t length;
@@ -18,4 +18,4 @@ void stretchyBufferPush(void *data, StretchyBuffer_t *sb);
 void *stretchyBufferAt(size_t index, StretchyBuffer_t *sb);
 void stretchyBufferClear(StretchyBuffer_t* sb);
 void stretchyBufferFree(StretchyBuffer_t* sb);
-#endif // PLATFORMER_STRETCHY_BUFFER_H
+#endif // COLF_STRETCHY_BUFFER_H

@@ -1,5 +1,5 @@
-#ifndef PLATFORMER_MODEL_H
-#define PLATFORMER_MODEL_H
+#ifndef COLF_MODEL_H
+#define COLF_MODEL_H
 
 #include <cglm/cglm.h>
 
@@ -18,4 +18,4 @@ const float face_texture_coordinates[108];
 const size_t unit_cube_face_size;
 const float unit_cube_south_vertices[3 * 6];
 
-#endif // PLATFORMER_MODEL_H
+#endif // COLF_MODEL_H

@@ -318,7 +318,7 @@ int main(int argc, char **argv) {
 		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "projection"), 1, GL_FALSE, render_data.projection);
 		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "model"), 1, GL_FALSE, model);
 
-//		glDrawArrays(GL_TRIANGLES, 0, world.tris);
+		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
 		//
 		//		// build geometry

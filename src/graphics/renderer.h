@@ -1,5 +1,5 @@
-#ifndef PLATFORMER_RENDERER_H
-#define PLATFORMER_RENDERER_H
+#ifndef COLF_RENDERER_H
+#define COLF_RENDERER_H
 #include <SDL.h>
 typedef struct {
 	float window_w;
@@ -19,4 +19,4 @@ void initRenderer(RenderData_t *data);
 void setWindowSize(float w, float h, RenderSettings_t *settings, RenderData_t *data);
 void centerWindow(RenderData_t *data);
 
-#endif // PLATFORMER_RENDERER_H
+#endif // COLF_RENDERER_H

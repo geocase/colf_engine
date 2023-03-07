@@ -1,10 +1,11 @@
-#ifndef PLATFORMER_LEVEL_H
-#define PLATFORMER_LEVEL_H
+#ifndef COLF_LEVEL_H
+#define COLF_LEVEL_H
 #include <stdbool.h>
 
 #include "containers/stretchy_buffer.h"
 #include "graphics/model.h"
 #include "utils.h"
+#include "entity.h"
 
 #define MAP_SIZE 16
 
@@ -15,9 +16,10 @@ typedef struct {
 } Tile_t;
 
 typedef struct {
+	Entity_t entity_placements;
 	Tile_t data[MAP_SIZE * MAP_SIZE];
 } Map_t;
 
 TexturedModel_t generateLevelGeometry(Map_t *map);
 
-#endif // PLATFORMER_LEVEL_H
+#endif // COLF_LEVEL_H

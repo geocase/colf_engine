@@ -1,0 +1,4 @@
+#ifndef COLF_GAME_INSTANCE_H
+#define COLF_GAME_INSTANCE_H
+
+#endif // COLF_GAME_INSTANCE_H
