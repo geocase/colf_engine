@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 	memset(&map, 0, sizeof(Map_t));
 	for (int y = 0; y < MAP_SIZE; ++y) {
 		for (int x = 0; x < MAP_SIZE; ++x) {
-			for(int i = 0; i < 6; ++i) {
+			for (int i = 0; i < 6; ++i) {
 				map.data[MAP_SIZE * y + x].tex_index[i] = rand() % 3;
 			}
 			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4 && x < 8)) {
@@ -63,7 +63,6 @@ int main(int argc, char **argv) {
 				map.data[MAP_SIZE * y + x].color.r = rand();
 				map.data[MAP_SIZE * y + x].color.g = rand();
 				map.data[MAP_SIZE * y + x].color.b = rand();
-
 			}
 		}
 	}
@@ -128,7 +127,7 @@ int main(int argc, char **argv) {
 							if (!map.data[MAP_SIZE * y + x].solid) {
 								k -= 1;
 							}
-							if(face == 4) {
+							if (face == 4) {
 								k += 2;
 							}
 							break;
