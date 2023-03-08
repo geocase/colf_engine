@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
 			for (int i = 0; i < 6; ++i) {
 				map.data[MAP_SIZE * y + x].tex_index[i] = rand() % 3;
 			}
-			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4  && x < 8)) {
-				if(!(x == 6 && y < 7)) {
+			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4 && x < 8)) {
+				if (!(x == 6 && y < 7)) {
 					map.data[MAP_SIZE * y + x].solid = true;
 					map.data[MAP_SIZE * y + x].color.r = rand();
 					map.data[MAP_SIZE * y + x].color.g = rand();
@@ -135,7 +135,9 @@ int main(int argc, char **argv) {
 	glm_mat4_identity(model);
 	glm_rotate(model, 45, (vec3){0, 1, 0});
 
-	vec3 camera_position = {-140, -5.0f, -80};
+	float world_scale = 1.0f;
+
+	vec3 camera_position = {-140, -(world_scale / 2.0f), -80}; // todo: scale here
 
 	SDL_Event ev;
 	bool run = true;
@@ -298,20 +300,21 @@ int main(int argc, char **argv) {
 		glClearColor(.5, .5, .5, 1.0);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		camera_position[0] = -player.position[0] * 10;
-		camera_position[2] = -player.position[1] * 10;
+		camera_position[0] = -player.position[0] * world_scale;
+		camera_position[2] = -player.position[1] * world_scale;
 
 		glm_mat4_identity(render_data.camera);
 		glm_rotate(render_data.camera, -player.angle - M_PI_2, (vec3){0, -1, 0});
 		glm_translate(render_data.camera, camera_position);
 
-		drawSpriteBillboard(bullet, &render_data, bullet_entity.position[0] * 10, 5, bullet_entity.position[1] * 10);
+		drawSpriteBillboard(bullet, &render_data, bullet_entity.position[0] * world_scale, world_scale / 2.0f, bullet_entity.position[1] * world_scale); // TODO: scale here as well
 
-		drawSpriteBillboard(ss, &render_data, ss_officer.position[0] * 10, 5, ss_officer.position[1] * 10);
+		drawSpriteBillboard(ss, &render_data, ss_officer.position[0] * world_scale, world_scale / 2.0f, ss_officer.position[1] * world_scale); // TODO: scale here as well
 
 		mat4 model;
 		glm_mat4_identity(model);
-		glm_scale(model, (vec3){10, 10, 10});
+		//  these values need to be the same
+		glm_scale(model, (vec3){world_scale, world_scale, world_scale}); // TODO: pull scale from a global variable -> stored in sprite.c as well
 		glm_translate(model, (vec3){0, 0, 0});
 
 		glBindTexture(GL_TEXTURE_2D, sam.index);

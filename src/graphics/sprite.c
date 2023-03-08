@@ -96,7 +96,7 @@ void billboardSpriteInit() {
 
 void drawSpriteBillboard(glTexture_t texture, RenderData_t *render_data, float x, float y, float z) {
 	mat4 model;
-	float scale = 10;
+	float scale = 1.0f; //TODO: this should be stored as a global variable or something
 	glm_mat4_identity(model);
 	glm_translate(model, (vec3){x, y, z});
 	glm_scale(model, (vec3){scale / 2, scale / 2, scale / 2});
