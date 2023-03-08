@@ -6,6 +6,7 @@
 
 void initRenderer(RenderData_t *data) {
 	glm_mat4_identity(data->projection);
+	glm_mat4_identity(data->ortho);
 	glm_mat4_identity(data->camera);
 	data->window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 10, 10, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -32,6 +33,8 @@ void setWindowSize(float w, float h, RenderSettings_t *settings, RenderData_t *d
 	settings->window_w = w;
 	settings->window_h = h;
 	glm_perspective(M_PI_2, settings->window_w / settings->window_h, 0.1f, 25, data->projection);
+	glm_ortho(0, settings->window_w, settings->window_h, 0, 0.5f, 4.0f, data->ortho);
+
 	glViewport(0, 0, settings->window_w, settings->window_h);
 	SDL_SetWindowSize(data->window, w, h);
 }

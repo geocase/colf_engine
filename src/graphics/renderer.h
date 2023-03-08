@@ -12,6 +12,7 @@ typedef struct {
 	SDL_Window *window;
 	SDL_GLContext *context;
 	mat4 projection;
+	mat4 ortho;
 	mat4 camera;
 } RenderData_t;
 
