@@ -96,6 +96,7 @@ int main(int argc, char **argv) {
 	Shader_t flat_shader;
 	initShader(frag, vert, &flat_shader);
 
+
 	unsigned int world_vert_buffer;
 	glGenBuffers(1, &world_vert_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, world_vert_buffer);
@@ -131,6 +132,10 @@ int main(int argc, char **argv) {
 	loadImage("bullet.png", &bullet_pixels);
 	glTexture_t bullet = pushTextureToGPU(&bullet_pixels);
 
+	TextureData_t sam_real_pixels;
+	loadImage("sam.png", &sam_real_pixels);
+	glTexture_t sam_real = pushTextureToGPU(&sam_real_pixels);
+
 	mat4 model;
 	glm_mat4_identity(model);
 	glm_rotate(model, 45, (vec3){0, 1, 0});
@@ -155,6 +160,7 @@ int main(int argc, char **argv) {
 		false, false, false, false, false, false, false, false};
 
 	billboardSpriteInit();
+	hudSpriteInit();
 
 	Entity_t bullet_entity = {.position = {0, 0}};
 	bullet_entity.radius = .5;
@@ -218,7 +224,7 @@ int main(int argc, char **argv) {
 						bullet_entity.position[1] = player.position[1];
 						bullet_shot = true;
 						bullet_entity.angle = player.angle;
-						printf("%f\n", angle);
+						printf("%f\n", bullet_entity.angle);
 						fflush(stdout);
 					}
 					break;
@@ -295,7 +301,6 @@ int main(int argc, char **argv) {
 			//			}
 			accumulated_frame_time -= 16;
 		}
-		//		generateLevelGeometry(&map);
 
 		glClearColor(.5, .5, .5, 1.0);
 		glClear(GL_DEPTH_BUFFER_BIT);
@@ -327,28 +332,7 @@ int main(int argc, char **argv) {
 
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
-		//
-		//		// build geometry
-		//		float scale = 10;
-		//		float offset = -100;
-		//		for (int y = 0; y < MAP_SIZE; ++y) {
-		//			for (int x = 0; x < MAP_SIZE; ++x) {
-		//				glm_mat4_identity(model);
-		//				RGBColor_t c = map.data[MAP_SIZE * y + x].color;
-		//				glUniform3f(glGetUniformLocation(flat_shader.program, "c"), normalize(0, 255, c.r), normalize(0, 255, c.g), normalize(0, 255, c.b));
-		//				if (map.data[MAP_SIZE * y + x].solid) {
-		//					glm_translate(model, (vec3){x * scale + offset, -(scale / 2.0f), y * scale + offset});
-		//					glm_scale_uni(model, 10);
-		//				} else {
-		//					glm_translate(model, (vec3){x * scale + offset, -(scale * 1.5f), y * scale + offset});
-		//					glm_scale_uni(model, 10);
-		//				}
-		//
-		//				glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "model"), 1, GL_FALSE, model);
-		//				//				glDrawArrays(GL_TRIANGLES, 0, 108 / 3);
-		//				glDrawArrays(GL_TRIANGLES, 0, 36);
-		//			}
-		//		}
+		drawSpriteHud(ss, &render_data, 0, 0, 720, 720);
 
 		SDL_GL_SwapWindow(render_data.window);
 
