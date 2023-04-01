@@ -32,7 +32,7 @@ void initRenderer(RenderData_t *data) {
 void setWindowSize(float w, float h, RenderSettings_t *settings, RenderData_t *data) {
 	settings->window_w = w;
 	settings->window_h = h;
-	glm_perspective(M_PI_2, settings->window_w / settings->window_h, 0.1f, 25, data->projection);
+	glm_perspective(M_PI_2, settings->window_w / settings->window_h, 0.1f, 10, data->projection);
 	glm_ortho(0.0f, settings->window_w, settings->window_h, 0.0f, -1.0f, 1.0f, data->ortho);
 	glViewport(0, 0, settings->window_w, settings->window_h);
 	SDL_SetWindowSize(data->window, w, h);

@@ -136,6 +136,10 @@ int main(int argc, char **argv) {
 	loadImage("sam.png", &sam_real_pixels);
 	glTexture_t sam_real = pushTextureToGPU(&sam_real_pixels);
 
+	TextureData_t gun_real_pixels;
+	loadImage("gun.png", &gun_real_pixels);
+	glTexture_t gun_real = pushTextureToGPU(&gun_real_pixels);
+
 	mat4 model;
 	glm_mat4_identity(model);
 	glm_rotate(model, 45, (vec3){0, 1, 0});
@@ -166,7 +170,7 @@ int main(int argc, char **argv) {
 	bullet_entity.radius = .5;
 	bool bullet_shot = false;
 
-	Entity_t ss_officer = {.position = {10, 6.5}, .angle = 0, .radius = .3};
+	Entity_t ss_officer = {.position = {10, 6.5}, .angle = 0, .radius = .2};
 	Entity_t player = {.position = {1.5, 1.5}, .angle = 0, .radius = .2};
 
 	while (run) {
@@ -268,7 +272,7 @@ int main(int argc, char **argv) {
 			//			entityWalkForward(&ss_officer, &map, .5 * delta);
 			entityWalkTowardsPoint(&ss_officer, &map, .5 * delta, player.position);
 			if (bullet_shot) {
-				entityWalkForward(&bullet_entity, &map, .5 * delta);
+//				entityWalkForward(&bullet_entity, &map, .5 * delta);
 			}
 			//			printf("INPUT\n");
 			if (input[0]) {
@@ -332,7 +336,7 @@ int main(int argc, char **argv) {
 
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
-		drawSpriteHud(ss, &render_data, 0, 0, 720, 720);
+		drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
 
 		SDL_GL_SwapWindow(render_data.window);
 
