@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 	glTexture_t bullet = pushTextureToGPU(&bullet_pixels);
 
 	TextureData_t sam_real_pixels;
-	loadImage("sam.png", &sam_real_pixels);
+	loadImage("blask.png", &sam_real_pixels);
 	glTexture_t sam_real = pushTextureToGPU(&sam_real_pixels);
 
 	TextureData_t gun_real_pixels;
@@ -160,8 +160,8 @@ int main(int argc, char **argv) {
 
 	float angle = 0;
 
-	bool input[9] = {
-		false, false, false, false, false, false, false, false};
+	bool input[10] = {
+		false, false, false, false, false, false, false, false, false};
 
 	billboardSpriteInit();
 	hudSpriteInit();
@@ -172,6 +172,10 @@ int main(int argc, char **argv) {
 
 	Entity_t ss_officer = {.position = {10, 6.5}, .angle = 0, .radius = .2};
 	Entity_t player = {.position = {1.5, 1.5}, .angle = 0, .radius = .2};
+
+	bool free_cam = false;
+	vec2 free_cam_coords;
+	float free_cam_angle;
 
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
@@ -232,7 +236,21 @@ int main(int argc, char **argv) {
 						fflush(stdout);
 					}
 					break;
+				case SDLK_j:
+					input[9] = true;
+					{
+						if(!free_cam) {
+							free_cam_coords[0] = player.position[0];
+							free_cam_coords[1] = player.position[1];
+							free_cam_angle = player.angle;
+							free_cam = true;
+						} else {
+							free_cam = false;
+						}
+					}
+					break;
 				}
+
 				break;
 			case SDL_KEYUP: {
 				switch (ev.key.keysym.sym) {
@@ -263,6 +281,9 @@ int main(int argc, char **argv) {
 				case SDLK_SPACE:
 					input[8] = false;
 					break;
+				case SDLK_j:
+					input[9] = false;
+					break;
 				}
 			} break;
 			}
@@ -272,29 +293,51 @@ int main(int argc, char **argv) {
 			//			entityWalkForward(&ss_officer, &map, .5 * delta);
 			entityWalkTowardsPoint(&ss_officer, &map, .5 * delta, player.position);
 			if (bullet_shot) {
-//				entityWalkForward(&bullet_entity, &map, .5 * delta);
+				entityWalkForward(&bullet_entity, &map, .5 * delta);
 			}
 			//			printf("INPUT\n");
-			if (input[0]) {
-				entityWalk(&player, &map, speed * delta, player.angle);
-			}
+			if(!free_cam) {
+				if (input[0]) {
+					entityWalk(&player, &map, speed * delta, player.angle);
+				}
 
-			if (input[1]) {
-				entityWalk(&player, &map, speed * delta, player.angle + M_PI);
-			}
+				if (input[1]) {
+					entityWalk(&player, &map, speed * delta, player.angle + M_PI);
+				}
 
-			if (input[2]) {
-				entityWalk(&player, &map, speed * delta, player.angle + M_PI_2);
-			}
+				if (input[2]) {
+					entityWalk(&player, &map, speed * delta, player.angle + M_PI_2);
+				}
 
-			if (input[3]) {
-				entityWalk(&player, &map, speed * delta, player.angle - M_PI_2);
-			}
-			if (input[4]) {
-				player.angle += 1 * delta;
-			}
-			if (input[5]) {
-				player.angle -= 1 * delta;
+				if (input[3]) {
+					entityWalk(&player, &map, speed * delta, player.angle - M_PI_2);
+				}
+				if (input[4]) {
+					player.angle += 1 * delta;
+				}
+				if (input[5]) {
+					player.angle -= 1 * delta;
+				}
+			} else {
+				if (input[0]) {
+					free_cam_coords[0] += cosf(free_cam_angle) * 0.4 * delta;
+					free_cam_coords[1] += sinf(free_cam_angle) * 0.4 * delta;
+				}
+
+				if (input[1]) {
+				}
+
+				if (input[2]) {
+				}
+
+				if (input[3]) {
+				}
+				if (input[4]) {
+					free_cam_angle += 1 * delta;
+				}
+				if (input[5]) {
+					free_cam_angle -= 1 * delta;
+				}
 			}
 
 			//			if (input[6]) {
@@ -309,11 +352,19 @@ int main(int argc, char **argv) {
 		glClearColor(.5, .5, .5, 1.0);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		camera_position[0] = -player.position[0] * world_scale;
-		camera_position[2] = -player.position[1] * world_scale;
+		float camera_angle = 0.0f;
+		if(free_cam) {
+			camera_position[0] = -free_cam_coords[0] * world_scale;
+			camera_position[2] = -free_cam_coords[1] * world_scale;
+			camera_angle = free_cam_angle;
+		} else {
+			camera_position[0] = -player.position[0] * world_scale;
+			camera_position[2] = -player.position[1] * world_scale;
+			camera_angle = player.angle;
+		}
 
 		glm_mat4_identity(render_data.camera);
-		glm_rotate(render_data.camera, -player.angle - M_PI_2, (vec3){0, -1, 0});
+		glm_rotate(render_data.camera, -camera_angle - M_PI_2, (vec3){0, -1, 0});
 		glm_translate(render_data.camera, camera_position);
 
 		drawSpriteBillboard(bullet, &render_data, bullet_entity.position[0] * world_scale, world_scale / 2.0f, bullet_entity.position[1] * world_scale); // TODO: scale here as well
@@ -336,7 +387,11 @@ int main(int argc, char **argv) {
 
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
-		drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+		if(!free_cam) {
+			drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+		} else {
+			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale, world_scale / 2.0f, player.position[1] * world_scale); // TODO: scale here as well
+		}
 
 		SDL_GL_SwapWindow(render_data.window);
 
