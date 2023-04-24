@@ -15,10 +15,26 @@ include_directories(lib/cglm-0.8.3/include)
 link_directories(SYSTEM lib/cglm-0.8.3/build)
 
 #include_directories(lib/cute)
+file(COPY src/run_data DESTINATION .)
 
 include_directories(src)
 
-set(SOURCES src/main.c src/main.c src/utils.c src/utils.h src/game/level.c src/game/level.h src/containers/stretchy_buffer.c src/containers/stretchy_buffer.h src/graphics/model.c src/graphics/model.h src/graphics/sprite.c src/graphics/sprite.h src/graphics/texture.c src/graphics/texture.h src/graphics/renderer.c src/graphics/renderer.h src/graphics/shader.c src/graphics/shader.h src/game/entity.c src/game/entity.h src/game/game_instance.c src/game/game_instance.h src/game/entity_functions.c src/game/entity_functions.h)
+set(SOURCES
+        src/assert.c src/assert.h
+        src/main.c
+        src/utils.c src/utils.h
+        src/game/level.c src/game/level.h
+        src/containers/stretchy_buffer.c src/containers/stretchy_buffer.h
+        src/graphics/model.c src/graphics/model.h
+        src/graphics/sprite.c src/graphics/sprite.h
+        src/graphics/texture.c src/graphics/texture.h
+        src/graphics/renderer.c src/graphics/renderer.h
+        src/game/entity.c src/game/entity.h
+        src/game/game_instance.c src/game/game_instance.h
+        src/game/entity_functions.c
+        src/graphics/gl_shader.c src/graphics/gl_shader.h
+        src/disk.c src/disk.h
+        src/containers/dynstring.c src/containers/dynstring.h)
 
 include_directories(lib/glad/include/)
 set(GLAD_SOURCES lib/glad/src/glad.c)
@@ -27,7 +43,7 @@ add_executable(${EXE_NAME} ${SOURCES} ${GLAD_SOURCES})
 set_property(TARGET ${EXE_NAME} PROPERTY C_STANDARD 11)
 
 
-if(WIN32)
+if (WIN32)
     target_compile_options(${EXE_NAME} PRIVATE)
     target_link_libraries(${EXE_NAME} SDL2 SDL2_image SDL2_mixer)
-endif(WIN32)
+endif (WIN32)

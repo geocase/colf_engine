@@ -16,33 +16,14 @@
 #include "containers/stretchy_buffer.h"
 #include "game/entity_functions.h"
 #include "game/level.h"
+#include "graphics/gl_shader.h"
 #include "graphics/model.h"
 #include "graphics/renderer.h"
-#include "graphics/shader.h"
 #include "graphics/sprite.h"
 #include "graphics/texture.h"
+#include "disk.h"
 #include "utils.h"
 
-const char *vert = "#version 330 core\n"
-				   "layout (location = 0) in vec3 pos;"
-				   "layout (location = 1) in vec3 text;"
-				   "uniform mat4 projection;"
-				   "uniform mat4 model;"
-				   "uniform mat4 view;"
-				   "uniform vec3 c;"
-				   "out vec2 tex_coord;"
-				   "void main() {"
-				   "	gl_Position = projection * view * model * vec4(pos, 1.0);"
-				   "	tex_coord = vec2(((text.x + text.z) / 3), text.y);" // temp
-				   "}";
-
-const char *frag = "#version 330 core\n"
-				   "out vec4 FragColor;"
-				   "in vec2 tex_coord;"
-				   "uniform sampler2D inTexture;"
-				   "void main() {"
-				   "	FragColor = texture(inTexture, tex_coord);"
-				   "}";
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -93,8 +74,11 @@ int main(int argc, char **argv) {
 	setWindowSize(1280, 720, &render_settings, &render_data);
 	centerWindow(&render_data);
 
-	Shader_t flat_shader;
-	initShader(frag, vert, &flat_shader);
+	string_t flat_vert = readTextFile("run_data/flat.v.glsl");
+	string_t flat_frag = readTextFile("run_data/flat.f.glsl");
+
+	shadergl_t flat_shader;
+	compileShaderGL(&flat_frag, &flat_vert, &flat_shader);
 
 
 	unsigned int world_vert_buffer;
@@ -380,10 +364,10 @@ int main(int argc, char **argv) {
 		glBindTexture(GL_TEXTURE_2D, sam.index);
 
 		glBindVertexArray(world_vao);
-		glUseProgram(flat_shader.program);
-		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "view"), 1, GL_FALSE, render_data.camera);
-		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "projection"), 1, GL_FALSE, render_data.projection);
-		glUniformMatrix4fv(glGetUniformLocation(flat_shader.program, "model"), 1, GL_FALSE, model);
+		glUseProgram(flat_shader.gl_program);
+		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "view"), 1, GL_FALSE, render_data.camera);
+		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "projection"), 1, GL_FALSE, render_data.projection);
+		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "model"), 1, GL_FALSE, model);
 
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
