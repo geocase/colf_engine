@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
 	SDL_SetMainReady();
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	IMG_Init(IMG_INIT_WEBP | IMG_INIT_PNG);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	// Gen Level
 	Map_t map;
@@ -161,6 +162,8 @@ int main(int argc, char **argv) {
 	vec2 free_cam_coords;
 	float free_cam_angle;
 
+	vec2 mouse_offset = {0, 0};
+
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
 		//		Mix_SetPanning(0, volume, volume); // since target is at zero, zero, use camera position only
@@ -178,6 +181,10 @@ int main(int argc, char **argv) {
 				break;
 			case SDL_QUIT:
 				run = false;
+				break;
+			case SDL_MOUSEMOTION:
+				mouse_offset[0] += ev.motion.xrel;
+				mouse_offset[1] += ev.motion.yrel;
 				break;
 			case SDL_KEYDOWN:
 				if (ev.key.repeat) {
@@ -274,6 +281,8 @@ int main(int argc, char **argv) {
 		}
 
 		while (accumulated_frame_time > 16) {
+			float mouse_sensitivity = 0.1f;
+			float mouse_delta = mouse_sensitivity * delta * mouse_offset[0];
 			//			entityWalkForward(&ss_officer, &map, .5 * delta);
 			entityWalkTowardsPoint(&ss_officer, &map, .5 * delta, player.position);
 			if (bullet_shot) {
@@ -296,6 +305,9 @@ int main(int argc, char **argv) {
 				if (input[3]) {
 					entityWalk(&player, &map, speed * delta, player.angle - M_PI_2);
 				}
+
+				player.angle += mouse_delta;
+
 				if (input[4]) {
 					player.angle += 1 * delta;
 				}
@@ -322,6 +334,7 @@ int main(int argc, char **argv) {
 				if (input[5]) {
 					free_cam_angle -= 1 * delta;
 				}
+				free_cam_angle += mouse_delta;
 			}
 
 			//			if (input[6]) {
@@ -330,6 +343,8 @@ int main(int argc, char **argv) {
 			//			if (input[7]) {
 			//				camera_position[1] += speed * delta;
 			//			}
+			mouse_offset[0] = 0;
+			mouse_offset[1] = 0;
 			accumulated_frame_time -= 16;
 		}
 
