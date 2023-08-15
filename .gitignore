@@ -3,3 +3,5 @@
 !.gitignore
 !.clang-format
 !/src/
+.DS_Store
+

@@ -110,23 +110,23 @@ int main(int argc, char **argv) {
 
 	// texture
 	TextureData_t ss_pixels;
-	loadImage("test.png", &ss_pixels);
+	loadImage("run_data/test.png", &ss_pixels);
 	glTexture_t ss = pushTextureToGPU(&ss_pixels);
 
 	TextureData_t sam_pixels;
-	loadImage("wall_temp.png", &sam_pixels);
+	loadImage("run_data/wall_temp.png", &sam_pixels);
 	glTexture_t sam = pushTextureToGPU(&sam_pixels);
 
 	TextureData_t bullet_pixels;
-	loadImage("bullet.png", &bullet_pixels);
+	loadImage("run_data/bullet.png", &bullet_pixels);
 	glTexture_t bullet = pushTextureToGPU(&bullet_pixels);
 
 	TextureData_t sam_real_pixels;
-	loadImage("blask.png", &sam_real_pixels);
+	loadImage("run_data/blask.png", &sam_real_pixels);
 	glTexture_t sam_real = pushTextureToGPU(&sam_real_pixels);
 
 	TextureData_t gun_real_pixels;
-	loadImage("gun.png", &gun_real_pixels);
+	loadImage("run_data/gun.png", &gun_real_pixels);
 	glTexture_t gun_real = pushTextureToGPU(&gun_real_pixels);
 
 	mat4 model;
