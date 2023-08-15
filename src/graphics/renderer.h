@@ -1,6 +1,12 @@
 #ifndef COLF_RENDERER_H
 #define COLF_RENDERER_H
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#endif
+
+#ifndef __APPLE__
 #include <SDL.h>
+#endif 
 typedef struct {
 	float window_w;
 	float window_h;

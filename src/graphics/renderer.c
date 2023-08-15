@@ -1,8 +1,20 @@
 #include <cglm/cglm.h>
 
 #include "renderer.h"
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#endif
+
+#ifndef __APPLE__
 #include <SDL.h>
+#endif 
+#ifdef __APPLE__
+#include "OpenGL/gl3.h"
+#endif
+
+#ifndef __APPLE__
 #include <glad/glad.h>
+#endif 
 
 void initRenderer(RenderData_t *data) {
 	glm_mat4_identity(data->projection);
@@ -17,10 +29,11 @@ void initRenderer(RenderData_t *data) {
 
 	data->context = SDL_GL_CreateContext(data->window);
 	SDL_GL_MakeCurrent(data->window, data->context);
-
+#ifndef __APPLE__
 	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
 		exit(-1);
 	}
+#endif
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);

@@ -2,10 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#endif
+
+#ifndef __APPLE__
 #include <SDL.h>
+#endif 
 #include <SDL_image.h>
 
+#ifdef __APPLE__
+#include "OpenGL/gl3.h"
+#endif
+
+#ifndef __APPLE__
 #include <glad/glad.h>
+#endif 
 
 #include "texture.h"
 

@@ -1,5 +1,11 @@
 #include <cglm/cglm.h>
+#ifdef __APPLE__
+#include "OpenGL/gl3.h"
+#endif
+
+#ifndef __APPLE__
 #include <glad/glad.h>
+#endif 
 
 #include "renderer.h"
 #include "shader.h"
