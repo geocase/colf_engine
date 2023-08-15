@@ -15,7 +15,7 @@
 
 #ifndef __APPLE__
 #include <glad/glad.h>
-#endif 
+#endif
 
 #include <math.h>
 #include <stdbool.h>
@@ -25,6 +25,7 @@
 #include <time.h>
 
 #include "containers/stretchy_buffer.h"
+#include "disk.h"
 #include "game/entity_functions.h"
 #include "game/level.h"
 #include "graphics/gl_shader.h"
@@ -32,9 +33,7 @@
 #include "graphics/renderer.h"
 #include "graphics/sprite.h"
 #include "graphics/texture.h"
-#include "disk.h"
 #include "utils.h"
-
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -91,7 +90,6 @@ int main(int argc, char **argv) {
 
 	shadergl_t flat_shader;
 	compileShaderGL(&flat_frag, &flat_vert, &flat_shader);
-
 
 	unsigned int world_vert_buffer;
 	glGenBuffers(1, &world_vert_buffer);
@@ -174,10 +172,9 @@ int main(int argc, char **argv) {
 	Entity_t free_cam_entity = {
 		.position = {0, 0},
 		.angle = 0,
-		.radius = .2
-	};
+		.radius = .2};
 
-	Entity_t* target_entity;
+	Entity_t *target_entity;
 
 	vec2 mouse_offset = {0, 0};
 
@@ -247,7 +244,7 @@ int main(int argc, char **argv) {
 				case SDLK_j:
 					input[9] = true;
 					{
-						if(!free_cam) {
+						if (!free_cam) {
 							glm_vec2_copy(player.position, free_cam_entity.position);
 							player.angle = player.angle;
 							free_cam = true;
@@ -305,7 +302,7 @@ int main(int argc, char **argv) {
 				entityWalkForward(&bullet_entity, &map, .5 * delta);
 			}
 			//			printf("INPUT\n");
-			if(!free_cam) {
+			if (!free_cam) {
 				if (input[0]) {
 					entityWalk(&player, &map, speed * delta, player.angle);
 				}
@@ -363,7 +360,7 @@ int main(int argc, char **argv) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		float camera_angle = 0.0f;
-		if(free_cam) {
+		if (free_cam) {
 			camera_position[0] = -free_cam_entity.position[0] * world_scale;
 			camera_position[2] = -free_cam_entity.position[1] * world_scale;
 			camera_angle = free_cam_entity.angle;
@@ -397,7 +394,7 @@ int main(int argc, char **argv) {
 
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
-		if(!free_cam) {
+		if (!free_cam) {
 			drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
 		} else {
 			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale, world_scale / 2.0f, player.position[1] * world_scale); // TODO: scale here as well

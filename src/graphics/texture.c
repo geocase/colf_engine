@@ -8,7 +8,7 @@
 
 #ifndef __APPLE__
 #include <SDL.h>
-#endif 
+#endif
 #include <SDL_image.h>
 
 #ifdef __APPLE__
@@ -17,7 +17,7 @@
 
 #ifndef __APPLE__
 #include <glad/glad.h>
-#endif 
+#endif
 
 #include "texture.h"
 

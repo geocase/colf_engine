@@ -7,14 +7,14 @@
 
 #ifndef __APPLE__
 #include <SDL.h>
-#endif 
+#endif
 #ifdef __APPLE__
 #include "OpenGL/gl3.h"
 #endif
 
 #ifndef __APPLE__
 #include <glad/glad.h>
-#endif 
+#endif
 
 void initRenderer(RenderData_t *data) {
 	glm_mat4_identity(data->projection);

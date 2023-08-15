@@ -4,7 +4,7 @@
 
 #ifndef __APPLE__
 #include <glad/glad.h>
-#endif 
+#endif
 #include <stdio.h>
 
 #include "shader.h"

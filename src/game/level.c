@@ -1,5 +1,5 @@
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "containers/stretchy_buffer.h"
 #include "graphics/model.h"

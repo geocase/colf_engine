@@ -3,6 +3,6 @@
 
 #include "containers/dynstring.h"
 
-string_t readTextFile(const char* const path);
+string_t readTextFile(const char *const path);
 
 #endif

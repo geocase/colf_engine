@@ -1,11 +1,11 @@
-#include <stdio.h>
-#include "assert.h"
 #include "disk.h"
-//TODO: disk IO, slurp files, load models, etc.
+#include "assert.h"
+#include <stdio.h>
+// TODO: disk IO, slurp files, load models, etc.
 
-string_t readTextFile(const char* const path) {
+string_t readTextFile(const char *const path) {
 	string_t str = {0};
-	FILE* f = fopen(path, "rb");
+	FILE *f = fopen(path, "rb");
 	assert(f, newString(path)); // better string building, err message
 	fseek(f, 0, SEEK_END);
 	size_t file_size = ftell(f);

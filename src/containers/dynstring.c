@@ -1,9 +1,9 @@
 #include "dynstring.h"
-#include <string.h>
-#include <stdlib.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
-string_t newString(const char* const str) {
+string_t newString(const char *const str) {
 	string_t out;
 	out.buffer_size = 0;
 	out.length = 0;
@@ -12,18 +12,18 @@ string_t newString(const char* const str) {
 	return out;
 }
 
-void destroyString(string_t* str) {
+void destroyString(string_t *str) {
 	free(str->str);
 	str->length = 0;
 	str->buffer_size = 0;
 }
 
-void trimString(string_t* const str, const size_t length) {
+void trimString(string_t *const str, const size_t length) {
 	str->length = length;
 	str->str[str->length] = '\0';
 }
 
-void appendCStringToString(char* cstr, string_t* str) {
+void appendCStringToString(char *cstr, string_t *str) {
 	size_t length = strlen(cstr);
 	growStringBuffer(str, length + str->length);
 	memcpy(str->str + str->length, cstr, (length + 1) * sizeof(char));
@@ -32,13 +32,13 @@ void appendCStringToString(char* cstr, string_t* str) {
 	return;
 }
 
-void resizeStringBuffer(string_t* const str, size_t size) {
+void resizeStringBuffer(string_t *const str, size_t size) {
 	str->buffer_size = size;
 	str->str = realloc(str->str, sizeof(char) * str->buffer_size);
 }
 
-void growStringBuffer(string_t* const str, const size_t size) {
-	if(str->buffer_size >= size) {
+void growStringBuffer(string_t *const str, const size_t size) {
+	if (str->buffer_size >= size) {
 		return;
 	} else {
 		resizeStringBuffer(str, size);
@@ -46,15 +46,15 @@ void growStringBuffer(string_t* const str, const size_t size) {
 	return;
 }
 
-void shrinkStringBuffer(string_t* const str) {
+void shrinkStringBuffer(string_t *const str) {
 	resizeStringBuffer(str, str->length + 1); // for null terminator
 }
 
-void clearString(string_t* const str) {
+void clearString(string_t *const str) {
 	memset(str->str, '\0', str->buffer_size * sizeof(char));
 }
 
-void setLength(string_t* const str, size_t length) {
+void setLength(string_t *const str, size_t length) {
 	growStringBuffer(str, length + 1);
 	str->length = length;
 	str->str[length] = '\0';

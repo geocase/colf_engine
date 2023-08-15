@@ -5,14 +5,14 @@
 
 #ifndef __APPLE__
 #include <glad/glad.h>
-#endif 
+#endif
 
-#include "renderer.h"
+#include "containers/dynstring.h"
+#include "disk.h"
 #include "gl_shader.h"
+#include "renderer.h"
 #include "sprite.h"
 #include "texture.h"
-#include "disk.h"
-#include "containers/dynstring.h"
 
 shadergl_t billboard_shader;
 unsigned int billboard_vao;
@@ -120,7 +120,7 @@ void hudSpriteInit() {
 
 		1.0f,
 		0.0f,
-		};
+	};
 
 	float tex_coords[] = {
 		0.0f,
@@ -168,7 +168,7 @@ void drawSpriteHud(glTexture_t texture, RenderData_t *render_data, float x, floa
 	mat4 model;
 	glm_mat4_identity(model);
 	glm_translate(model, (vec3){x, y, 0});
-//	glm_rotate(model, M_PI_2, (vec3){0, 0, 0});
+	//	glm_rotate(model, M_PI_2, (vec3){0, 0, 0});
 	glm_scale(model, (vec3){w, h, 1});
 
 	glUseProgram(hud_shader.gl_program);

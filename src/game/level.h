@@ -10,7 +10,6 @@
 
 #define MAP_SIZE 16
 
-
 typedef struct {
 	bool solid;
 	RGBColor_t color;
@@ -18,7 +17,7 @@ typedef struct {
 } Tile_t;
 
 typedef struct {
-	Entity_t* entity_placements;
+	Entity_t *entity_placements;
 	Tile_t data[MAP_SIZE * MAP_SIZE];
 } Map_t;
 

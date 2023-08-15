@@ -4,8 +4,8 @@
 #include <cglm/cglm.h>
 
 typedef struct {
-	float* vertices;
-	float* texture_coordinates;
+	float *vertices;
+	float *texture_coordinates;
 	size_t tris;
 } TexturedModel_t;
 

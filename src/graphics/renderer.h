@@ -6,7 +6,7 @@
 
 #ifndef __APPLE__
 #include <SDL.h>
-#endif 
+#endif
 typedef struct {
 	float window_w;
 	float window_h;
