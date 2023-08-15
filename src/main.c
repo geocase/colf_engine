@@ -159,8 +159,14 @@ int main(int argc, char **argv) {
 	Entity_t player = {.position = {1.5, 1.5}, .angle = 0, .radius = .2};
 
 	bool free_cam = false;
-	vec2 free_cam_coords;
-	float free_cam_angle;
+
+	Entity_t free_cam_entity = {
+		.position = {0, 0},
+		.angle = 0,
+		.radius = .2
+	};
+
+	Entity_t* target_entity;
 
 	vec2 mouse_offset = {0, 0};
 
@@ -231,9 +237,8 @@ int main(int argc, char **argv) {
 					input[9] = true;
 					{
 						if(!free_cam) {
-							free_cam_coords[0] = player.position[0];
-							free_cam_coords[1] = player.position[1];
-							free_cam_angle = player.angle;
+							glm_vec2_copy(player.position, free_cam_entity.position);
+							player.angle = player.angle;
 							free_cam = true;
 						} else {
 							free_cam = false;
@@ -316,46 +321,41 @@ int main(int argc, char **argv) {
 				}
 			} else {
 				if (input[0]) {
-					free_cam_coords[0] += cosf(free_cam_angle) * 0.4 * delta;
-					free_cam_coords[1] += sinf(free_cam_angle) * 0.4 * delta;
+					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle);
 				}
-
 				if (input[1]) {
+					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle + M_PI);
 				}
 
 				if (input[2]) {
+					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle + M_PI_2);
 				}
 
 				if (input[3]) {
+					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle - M_PI_2);
 				}
+
 				if (input[4]) {
-					free_cam_angle += 1 * delta;
+					free_cam_entity.angle += 1 * delta;
 				}
 				if (input[5]) {
-					free_cam_angle -= 1 * delta;
+					free_cam_entity.angle -= 1 * delta;
 				}
-				free_cam_angle += mouse_delta;
+				free_cam_entity.angle += mouse_delta;
 			}
-
-			//			if (input[6]) {
-			//				camera_position[1] -= speed * delta;
-			//			}
-			//			if (input[7]) {
-			//				camera_position[1] += speed * delta;
-			//			}
 			mouse_offset[0] = 0;
 			mouse_offset[1] = 0;
 			accumulated_frame_time -= 16;
 		}
 
 		glClearColor(.5, .5, .5, 1.0);
-		glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		float camera_angle = 0.0f;
 		if(free_cam) {
-			camera_position[0] = -free_cam_coords[0] * world_scale;
-			camera_position[2] = -free_cam_coords[1] * world_scale;
-			camera_angle = free_cam_angle;
+			camera_position[0] = -free_cam_entity.position[0] * world_scale;
+			camera_position[2] = -free_cam_entity.position[1] * world_scale;
+			camera_angle = free_cam_entity.angle;
 		} else {
 			camera_position[0] = -player.position[0] * world_scale;
 			camera_position[2] = -player.position[1] * world_scale;
@@ -397,6 +397,8 @@ int main(int argc, char **argv) {
 		frame_end = SDL_GetTicks64();
 		accumulated_frame_time += frame_end - frame_start;
 	}
+
+	SDL_Quit();
 
 	return 0;
 }

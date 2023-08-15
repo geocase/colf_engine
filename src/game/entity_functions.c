@@ -40,6 +40,11 @@ void entityWalkTowardsPoint(Entity_t* entity, Map_t* map, float speed, vec2 posi
 	return;
 }
 
+void entityMove(Entity_t* entity, Map_t* map, float speed, float angle) {
+	entity->position[0] += cosf(angle) * speed;
+	entity->position[1] += sinf(angle) * speed;
+}
+
 void entityWalk(Entity_t* entity, Map_t* map, float speed, float angle) {
 	vec2 slide = {0, 0};
 	bool can_walk = entityCollideAndSlide(entity, map, angle, speed, slide);

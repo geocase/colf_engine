@@ -3,6 +3,7 @@
 
 #include "level.h"
 #include "entity.h"
+void entityMove(Entity_t* entity, Map_t* map, float speed, float angle);
 bool entityCanMove(Entity_t* entity, Map_t* map, float angle, float distance, vec2 slide);
 void entityWalkTowardsPoint(Entity_t* entity, Map_t* map, float speed, vec2 position);
 void entityWalk(Entity_t* entity, Map_t* map, float speed, float angle);
