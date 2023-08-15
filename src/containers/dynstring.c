@@ -1,6 +1,7 @@
 #include "dynstring.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stddef.h>
 
 string_t newString(const char* const str) {
 	string_t out;
@@ -22,7 +23,7 @@ void trimString(string_t* const str, const size_t length) {
 	str->str[str->length] = '\0';
 }
 
-void appendCStringToString(const char* const cstr, string_t* const str) {
+void appendCStringToString(char* cstr, string_t* str) {
 	size_t length = strlen(cstr);
 	growStringBuffer(str, length + str->length);
 	memcpy(str->str + str->length, cstr, (length + 1) * sizeof(char));

@@ -1,6 +1,6 @@
 #ifndef TEST_STRING_H
 #define TEST_STRING_H
-
+#include <stddef.h>
 typedef struct str {
 	char* str;
 	size_t length;
