@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include "entity_functions.h"
 
+#ifdef __APPLE__
+#define max(a,b) fmax(a,b)
+#define min(a,b) fmin(a,b)
+#endif
+
 bool entityCollideAndSlide(Entity_t* entity, Map_t* map, float angle, float distance, vec2 slide) {
 	// https://github.com/OneLoneCoder/Javidx9/blob/master/PixelGameEngine/SmallerProjects/OneLoneCoder_PGE_CircleVsRect.cpp
 	float x_delta = cosf(angle) * distance;

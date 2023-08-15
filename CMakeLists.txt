@@ -2,18 +2,22 @@ cmake_minimum_required(VERSION 3.1.0)
 project(colf)
 set(EXE_NAME colf)
 
-include_directories(lib/SDL2-2.26.3/include)
-link_directories(SYSTEM lib/SDL2-2.26.3/lib/x64)
+if(WIN32)
+    include_directories(lib/SDL2-2.26.3/include)
+    link_directories(SYSTEM lib/SDL2-2.26.3/lib/x64)
 
-include_directories(lib/SDL2_image-2.0.5/include)
-link_directories(SYSTEM lib/SDL2_image-2.0.5/lib/x64)
+    include_directories(lib/SDL2_image-2.0.5/include)
+    link_directories(SYSTEM lib/SDL2_image-2.0.5/lib/x64)
 
-include_directories(lib/SDL2_mixer-2.6.3/include)
-link_directories(SYSTEM lib/SDL2_mixer-2.6.3/lib/x64)
+    include_directories(lib/SDL2_mixer-2.6.3/include)
+    link_directories(SYSTEM lib/SDL2_mixer-2.6.3/lib/x64)
 
-include_directories(lib/cglm-0.8.3/include)
-link_directories(SYSTEM lib/cglm-0.8.3/build)
+    include_directories(lib/cglm-0.8.3/include)
+    link_directories(SYSTEM lib/cglm-0.8.3/build)
 
+    include_directories(lib/glad/include/)  
+set(GLAD_SOURCES lib/glad/src/glad.c)
+endif(WIN32)
 #include_directories(lib/cute)
 file(COPY src/run_data DESTINATION .)
 
@@ -36,14 +40,26 @@ set(SOURCES
         src/disk.c src/disk.h
         src/containers/dynstring.c src/containers/dynstring.h)
 
-include_directories(lib/glad/include/)
-set(GLAD_SOURCES lib/glad/src/glad.c)
+
+if(APPLE)
+    include_directories(lib/cglm-0.9.1/include)
+    link_directories(lib/cglm-0.9.1/build)
+
+    include_directories(/opt/homebrew/include/SDL2) 
+    link_directories(/opt/homebrew/lib)
+
+    find_package(SDL2_image REQUIRED)
+endif(APPLE)
 
 add_executable(${EXE_NAME} ${SOURCES} ${GLAD_SOURCES})
 set_property(TARGET ${EXE_NAME} PROPERTY C_STANDARD 11)
 
-
-if (WIN32)
+if(APPLE) 
+    MESSAGE(status ">>> MAC")
+    target_link_libraries(${EXE_NAME} SDL2_image::SDL2_image m "-framework OpenGL" "-framework SDL2" "-framework SDL2_image")
+    add_definitions(-DGL_SILENCE_DEPRECATION)
+endif(APPLE)
+if(WIN32)
     target_compile_options(${EXE_NAME} PRIVATE)
     target_link_libraries(${EXE_NAME} SDL2 SDL2_image SDL2_mixer)
 endif (WIN32)
