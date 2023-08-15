@@ -1,5 +1,6 @@
 #ifndef COLF_RENDERER_H
 #define COLF_RENDERER_H
+#include <cglm/cglm.h>
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
 #endif

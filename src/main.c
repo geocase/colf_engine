@@ -1,19 +1,14 @@
 #include <cglm/cglm.h>
 
 #define SDL_MAIN_HANDLED
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
+#endif
 #ifndef __APPLE__
 #include <SDL.h>
-#endif
-#ifdef __APPLE___
-#include <SDL2/SDL.h>
-#endif
 #include <SDL_image.h>
-// #include <SDL_mixer.h>
-#ifdef __APPLE__
-#include "OpenGL/gl3.h"
-#endif
-
-#ifndef __APPLE__
 #include <glad/glad.h>
 #endif
 
