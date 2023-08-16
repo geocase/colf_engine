@@ -30,6 +30,7 @@
 #include "graphics/sprite.h"
 #include "graphics/texture.h"
 #include "utils.h"
+#include "graphics/text.h"
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -91,9 +92,7 @@ int main(int argc, char **argv) {
 	centerWindow(&render_data);
 
 
-	TextureData_t hello_text;
-	loadTextureFromSDLSurface(hello_surf, &hello_text);
-	glTexture_t hello_real = pushTextureToGPU(&hello_text);
+	
 
 
 	string_t flat_vert = readTextFile("run_data/flat.v.glsl");
@@ -188,6 +187,10 @@ int main(int argc, char **argv) {
 	Entity_t *target_entity;
 
 	vec2 mouse_offset = {0, 0};
+	StringTexture_t fat_bitch;
+	string_t str = newString("FAT BITCH!!!");
+	newStringTexture(str, &fat_bitch);
+	glTexture_t fat_real = pushTextureToGPU(&fat_bitch.texture);
 
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
@@ -406,8 +409,7 @@ int main(int argc, char **argv) {
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
 		if (!free_cam) {
-			// drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
-			drawSpriteHud(hello_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+			drawSpriteHud(fat_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
 		} else {
 			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale, world_scale / 2.0f, player.position[1] * world_scale); // TODO: scale here as well
 		}

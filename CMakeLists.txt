@@ -31,6 +31,7 @@ set(SOURCES
         src/containers/stretchy_buffer.c src/containers/stretchy_buffer.h
         src/graphics/model.c src/graphics/model.h
         src/graphics/sprite.c src/graphics/sprite.h
+        src/graphics/text.c src/graphics/text.h
         src/graphics/texture.c src/graphics/texture.h
         src/graphics/renderer.c src/graphics/renderer.h
         src/game/entity.c src/game/entity.h
