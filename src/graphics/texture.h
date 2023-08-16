@@ -9,6 +9,7 @@ typedef struct {
 	int w, h;
 	unsigned int index;
 } glTexture_t;
+void loadTextureFromSDLSurface(SDL_Surface* sfc, TextureData_t* out);
 void loadImage(const char *path, TextureData_t *out);
 glTexture_t pushTextureToGPU(TextureData_t *text);
 #endif // COLF_TEXTURE_H

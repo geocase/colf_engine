@@ -5,6 +5,7 @@
 #include <OpenGL/gl3.h>
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #endif
 #ifndef __APPLE__
 #include <SDL.h>
@@ -36,8 +37,15 @@ int main(int argc, char **argv) {
 	SDL_SetMainReady();
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	IMG_Init(IMG_INIT_WEBP | IMG_INIT_PNG);
+	TTF_Init();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
+	TTF_Font* pt_serif = TTF_OpenFont("run_data/PTSerif-Regular.ttf", 14);
+	SDL_Surface* hello_surf = TTF_RenderText_Blended(pt_serif, "Hello, world!", (SDL_Color){255, 0, 0, 255});
+	if(hello_surf == NULL) {
+		printf("%s\n", TTF_GetError());
+	}
+	
 	// Gen Level
 	Map_t map;
 	memset(&map, 0, sizeof(Map_t));
@@ -56,6 +64,8 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
+
+
 
 	TexturedModel_t world = generateLevelGeometry(&map);
 
@@ -79,6 +89,12 @@ int main(int argc, char **argv) {
 
 	setWindowSize(1280, 720, &render_settings, &render_data);
 	centerWindow(&render_data);
+
+
+	TextureData_t hello_text;
+	loadTextureFromSDLSurface(hello_surf, &hello_text);
+	glTexture_t hello_real = pushTextureToGPU(&hello_text);
+
 
 	string_t flat_vert = readTextFile("run_data/flat.v.glsl");
 	string_t flat_frag = readTextFile("run_data/flat.f.glsl");
@@ -390,7 +406,8 @@ int main(int argc, char **argv) {
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
 		if (!free_cam) {
-			drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+			// drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+			drawSpriteHud(hello_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
 		} else {
 			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale, world_scale / 2.0f, player.position[1] * world_scale); // TODO: scale here as well
 		}

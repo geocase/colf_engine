@@ -40,14 +40,11 @@ void flipSurface(SDL_Surface *surf) {
 	SDL_UnlockSurface(surf);
 }
 
-void loadImage(const char *path, TextureData_t *out) {
-	printf("%s\n", path);
-	SDL_Surface *tmp_img = IMG_Load(path);
+void loadTextureFromSDLSurface(SDL_Surface* sfc, TextureData_t* out) {
 	SDL_PixelFormat *fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32);
-	SDL_Surface *conv = SDL_ConvertSurface(tmp_img, fmt, 0);
-	flipSurface(conv);
-
+	SDL_Surface *conv = SDL_ConvertSurface(sfc, fmt, 0);
 	SDL_LockSurface(conv);
+	flipSurface(conv);
 
 	out->w = conv->w;
 	out->h = conv->h;
@@ -56,6 +53,13 @@ void loadImage(const char *path, TextureData_t *out) {
 
 	SDL_UnlockSurface(conv);
 	SDL_FreeSurface(conv);
+	return;
+}
+
+void loadImage(const char *path, TextureData_t *out) {
+	printf("%s\n", path);
+	SDL_Surface *tmp_img = IMG_Load(path);
+	loadTextureFromSDLSurface(tmp_img, out);
 	SDL_FreeSurface(tmp_img);
 
 	return;
