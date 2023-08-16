@@ -45,10 +45,9 @@ if(APPLE)
     include_directories(lib/cglm-0.9.1/include)
     link_directories(lib/cglm-0.9.1/build)
 
-    include_directories(/opt/homebrew/include/SDL2) 
-    link_directories(/opt/homebrew/lib)
-
+    find_package(SDL2 REQUIRED)
     find_package(SDL2_image REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
 endif(APPLE)
 
 add_executable(${EXE_NAME} ${SOURCES} ${GLAD_SOURCES})
@@ -56,7 +55,7 @@ set_property(TARGET ${EXE_NAME} PROPERTY C_STANDARD 11)
 
 if(APPLE) 
     MESSAGE(status ">>> MAC")
-    target_link_libraries(${EXE_NAME} SDL2_image::SDL2_image m "-framework OpenGL" "-framework SDL2" "-framework SDL2_image")
+    target_link_libraries(${EXE_NAME} SDL2_image::SDL2_image SDL2::SDL2 SDL2_ttf::SDL2_ttf m "-framework OpenGL")
     add_definitions(-DGL_SILENCE_DEPRECATION)
 endif(APPLE)
 if(WIN32)
