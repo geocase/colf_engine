@@ -40,10 +40,15 @@ void flipSurface(SDL_Surface *surf) {
 	SDL_UnlockSurface(surf);
 }
 
-void loadTextureFromSDLSurface(SDL_Surface* sfc, TextureData_t* out) {
+void generateTextureFromSDLSurface(SDL_Surface* sfc, TextureData_t* out) {
 	SDL_PixelFormat *fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32);
+	if(fmt == NULL) {
+		exit(-1);
+	}
 	SDL_Surface *conv = SDL_ConvertSurface(sfc, fmt, 0);
-	SDL_LockSurface(conv);
+	if(SDL_LockSurface(conv) > 0) {
+		printf("%s\n", SDL_GetError());
+	}
 	flipSurface(conv);
 
 	out->w = conv->w;
@@ -53,16 +58,21 @@ void loadTextureFromSDLSurface(SDL_Surface* sfc, TextureData_t* out) {
 
 	SDL_UnlockSurface(conv);
 	SDL_FreeSurface(conv);
+	SDL_FreeFormat(fmt);
 	return;
 }
 
-void loadImage(const char *path, TextureData_t *out) {
+void loadImageToTexture(const char *path, TextureData_t *out) {
 	printf("%s\n", path);
 	SDL_Surface *tmp_img = IMG_Load(path);
-	loadTextureFromSDLSurface(tmp_img, out);
+	generateTextureFromSDLSurface(tmp_img, out);
 	SDL_FreeSurface(tmp_img);
 
 	return;
+}
+
+void deleteTexture(TextureData_t* del) {
+	free(del->data);
 }
 
 glTexture_t pushTextureToGPU(TextureData_t *text) {
@@ -78,4 +88,8 @@ glTexture_t pushTextureToGPU(TextureData_t *text) {
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	return (glTexture_t){text->w, text->h, texture_index};
+}
+
+void deleteGlTexture(glTexture_t gltex) {
+	glDeleteTextures(1, &(gltex.index));
 }
