@@ -40,13 +40,6 @@ int main(int argc, char **argv) {
 	IMG_Init(IMG_INIT_WEBP | IMG_INIT_PNG);
 	TTF_Init();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-
-	TTF_Font* pt_serif = TTF_OpenFont("run_data/PTSerif-Regular.ttf", 14);
-	SDL_Surface* hello_surf = TTF_RenderText_Blended(pt_serif, "Hello, world!", (SDL_Color){255, 0, 0, 255});
-	if(hello_surf == NULL) {
-		printf("%s\n", TTF_GetError());
-	}
-	
 	// Gen Level
 	Map_t map;
 	memset(&map, 0, sizeof(Map_t));
@@ -125,23 +118,23 @@ int main(int argc, char **argv) {
 
 	// texture
 	TextureData_t ss_pixels;
-	loadImage("run_data/test.png", &ss_pixels);
+	loadImageToTexture("run_data/test.png", &ss_pixels);
 	glTexture_t ss = pushTextureToGPU(&ss_pixels);
 
 	TextureData_t sam_pixels;
-	loadImage("run_data/wall_temp.png", &sam_pixels);
+	loadImageToTexture("run_data/wall_temp.png", &sam_pixels);
 	glTexture_t sam = pushTextureToGPU(&sam_pixels);
 
 	TextureData_t bullet_pixels;
-	loadImage("run_data/bullet.png", &bullet_pixels);
+	loadImageToTexture("run_data/bullet.png", &bullet_pixels);
 	glTexture_t bullet = pushTextureToGPU(&bullet_pixels);
 
 	TextureData_t sam_real_pixels;
-	loadImage("run_data/blask.png", &sam_real_pixels);
+	loadImageToTexture("run_data/blask.png", &sam_real_pixels);
 	glTexture_t sam_real = pushTextureToGPU(&sam_real_pixels);
 
 	TextureData_t gun_real_pixels;
-	loadImage("run_data/gun.png", &gun_real_pixels);
+	loadImageToTexture("run_data/gun.png", &gun_real_pixels);
 	glTexture_t gun_real = pushTextureToGPU(&gun_real_pixels);
 
 	mat4 model;
@@ -185,13 +178,13 @@ int main(int argc, char **argv) {
 		.radius = .2};
 
 	Entity_t *target_entity;
-
 	vec2 mouse_offset = {0, 0};
-	StringTexture_t fat_bitch;
-	string_t str = newString("FAT BITCH!!!");
-	newStringTexture(str, &fat_bitch);
-	glTexture_t fat_real = pushTextureToGPU(&fat_bitch.texture);
 
+
+	string_t test_str = newString("Hello, world!");
+	float fps_value = 0;
+	unsigned long game_start = SDL_GetTicks64();
+	unsigned long frames = 0;
 	while (run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
 		//		Mix_SetPanning(0, volume, volume); // since target is at zero, zero, use camera position only
@@ -409,15 +402,25 @@ int main(int argc, char **argv) {
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
 		if (!free_cam) {
-			drawSpriteHud(fat_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+			drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
 		} else {
 			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale, world_scale / 2.0f, player.position[1] * world_scale); // TODO: scale here as well
 		}
+
+		char fps[20];
+		sprintf(fps, "%.5f", fps_value);
+		clearString(&test_str);
+		appendCStringToString(fps, &test_str);
+
+		drawStringHud(test_str, &render_data, 0, 0, 14);
 
 		SDL_GL_SwapWindow(render_data.window);
 
 		frame_end = SDL_GetTicks64();
 		accumulated_frame_time += frame_end - frame_start;
+		frames += 1;
+
+		fps_value = frames / ((SDL_GetTicks64() - game_start) / 1000.0f);
 	}
 
 	SDL_Quit();

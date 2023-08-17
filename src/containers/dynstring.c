@@ -52,6 +52,7 @@ void shrinkStringBuffer(string_t *const str) {
 
 void clearString(string_t *const str) {
 	memset(str->str, '\0', str->buffer_size * sizeof(char));
+	str->length = 0;
 }
 
 void setLength(string_t *const str, size_t length) {
