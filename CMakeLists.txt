@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5.0)
 project(colf)
 set(EXE_NAME colf)
 
@@ -58,6 +58,11 @@ if(APPLE)
     MESSAGE(status ">>> MAC")
     target_link_libraries(${EXE_NAME} SDL2_image::SDL2_image SDL2::SDL2 SDL2_ttf::SDL2_ttf m "-framework OpenGL")
     add_definitions(-DGL_SILENCE_DEPRECATION)
+    get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+	foreach(dir ${dirs})
+  		message(STATUS "dir='${dir}'")
+	endforeach()
+
 endif(APPLE)
 if(WIN32)
     target_compile_options(${EXE_NAME} PRIVATE)

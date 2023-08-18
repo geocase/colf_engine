@@ -34,7 +34,7 @@
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
-
+	printf("Hello, world!");
 	SDL_SetMainReady();
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	IMG_Init(IMG_INIT_WEBP | IMG_INIT_PNG);

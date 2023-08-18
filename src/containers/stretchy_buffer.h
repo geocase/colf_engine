@@ -5,6 +5,7 @@
 #ifndef COLF_STRETCHY_BUFFER_H
 #define COLF_STRETCHY_BUFFER_H
 
+#include <stddef.h>
 typedef struct {
 	size_t length;
 	size_t size;
