@@ -412,7 +412,7 @@ int main(int argc, char **argv) {
 		clearString(&test_str);
 		appendCStringToString(fps, &test_str);
 
-		drawStringHud(test_str, &render_data, 0, 0, 14);
+		drawStringHud(test_str, &render_data, 0, 0, 28);
 
 		SDL_GL_SwapWindow(render_data.window);
 
