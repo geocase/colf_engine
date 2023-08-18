@@ -1,5 +1,7 @@
 #include "text.h"
+#include "graphics/renderer.h"
 #include "graphics/sprite.h"
+#include <SDL2/SDL.h>
 #include <SDL2_ttf/SDL_ttf.h>
 
 TTF_Font *courier = NULL; // temp

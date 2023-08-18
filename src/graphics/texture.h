@@ -1,5 +1,12 @@
 #ifndef COLF_TEXTURE_H
 #define COLF_TEXTURE_H
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#endif
+
+#ifndef __APPLE__
+#include <SDL.h>
+#endif
 typedef struct {
 	int w, h;
 	char *data; // format is normalized;

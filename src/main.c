@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
 	while(run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
 		//		Mix_SetPanning(0, volume, volume); // since target is at zero, zero, use camera
-		//position only
+		// position only
 		uint64_t diag_frame_start = SDL_GetPerformanceCounter();
 		frame_start = SDL_GetTicks64();
 		i += .001;
