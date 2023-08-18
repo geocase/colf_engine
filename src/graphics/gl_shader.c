@@ -9,14 +9,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void compileShaderGL(const string_t const *fragment_shader_source, const string_t const *vertex_shader_source,
-					 shadergl_t *const out) {
+void compileShaderGL(const string_t const *fragment_shader_source,
+					 const string_t const *vertex_shader_source, shadergl_t *const out) {
 	out->gl_vertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(out->gl_vertex, 1, &vertex_shader_source->str, NULL);
 	glCompileShader(out->gl_vertex);
 	int success;
 	glGetShaderiv(out->gl_vertex, GL_COMPILE_STATUS, &success);
-	if (!success) {
+	if(!success) {
 		int length;
 		glGetShaderiv(out->gl_vertex, GL_INFO_LOG_LENGTH, &length);
 		char *info_log = malloc(sizeof(char) * length);
@@ -30,7 +30,7 @@ void compileShaderGL(const string_t const *fragment_shader_source, const string_
 	glShaderSource(out->gl_fragment, 1, &fragment_shader_source->str, NULL);
 	glCompileShader(out->gl_fragment);
 	glGetShaderiv(out->gl_fragment, GL_COMPILE_STATUS, &success);
-	if (!success) {
+	if(!success) {
 		int length;
 		glGetShaderiv(out->gl_fragment, GL_INFO_LOG_LENGTH, &length);
 		char *info_log = malloc(sizeof(char) * length);
@@ -46,7 +46,7 @@ void compileShaderGL(const string_t const *fragment_shader_source, const string_
 	glAttachShader(out->gl_program, out->gl_fragment);
 	glLinkProgram(out->gl_program);
 	glGetShaderiv(out->gl_program, GL_LINK_STATUS, &success);
-	if (!success) {
+	if(!success) {
 		int length;
 		glGetShaderiv(out->gl_fragment, GL_INFO_LOG_LENGTH, &length);
 		char *info_log = malloc(sizeof(char) * length);

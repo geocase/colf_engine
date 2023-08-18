@@ -17,7 +17,7 @@ void initShader(const char *frag_source, const char *vertex_source, Shader_t *ou
 	int success;
 	char infoLog[512];
 	glGetShaderiv(out->vertex, GL_COMPILE_STATUS, &success);
-	if (!success) {
+	if(!success) {
 		glGetShaderInfoLog(out->vertex, 512, NULL, infoLog);
 		printf("VERT\n%s\n", infoLog);
 		return;
@@ -28,7 +28,7 @@ void initShader(const char *frag_source, const char *vertex_source, Shader_t *ou
 	glCompileShader(out->fragment);
 
 	glGetShaderiv(out->fragment, GL_COMPILE_STATUS, &success);
-	if (!success) {
+	if(!success) {
 		glGetShaderInfoLog(out->fragment, 512, NULL, infoLog);
 		printf("FRAG\n%s\n", infoLog);
 		return;
@@ -40,7 +40,7 @@ void initShader(const char *frag_source, const char *vertex_source, Shader_t *ou
 	glLinkProgram(out->program);
 
 	glGetShaderiv(out->program, GL_LINK_STATUS, &success);
-	if (!success) {
+	if(!success) {
 		glGetShaderInfoLog(out->program, 512, NULL, infoLog);
 		printf("%s\n", infoLog);
 		return;

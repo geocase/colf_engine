@@ -10,7 +10,7 @@ typedef struct shadergl {
 } shadergl_t;
 
 // assuming out is allocated
-void compileShaderGL(const string_t const *fragment_shader_source, const string_t const *vertex_shader_source,
-					 shadergl_t *const out);
+void compileShaderGL(const string_t const *fragment_shader_source,
+					 const string_t const *vertex_shader_source, shadergl_t *const out);
 
 #endif // TEST_GL_SHADER_H

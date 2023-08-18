@@ -28,7 +28,7 @@ void flipSurface(SDL_Surface *surf) {
 	char *temp = malloc(sizeof(char) * pitch);
 	char *pixels = (char *)surf->pixels;
 
-	for (int i = 0; i < surf->h / 2; ++i) {
+	for(int i = 0; i < surf->h / 2; ++i) {
 		char *row1 = pixels + i * pitch;
 		char *row2 = pixels + (surf->h - i - 1) * pitch;
 
@@ -40,7 +40,7 @@ void flipSurface(SDL_Surface *surf) {
 	SDL_UnlockSurface(surf);
 }
 
-void generateTextureFromSDLSurface(SDL_Surface* sfc, TextureData_t* out) {
+void generateTextureFromSDLSurface(SDL_Surface *sfc, TextureData_t *out) {
 	SDL_PixelFormat *fmt = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32);
 	if(fmt == NULL) {
 		exit(-1);
@@ -71,16 +71,15 @@ void loadImageToTexture(const char *path, TextureData_t *out) {
 	return;
 }
 
-void deleteTexture(TextureData_t* del) {
-	free(del->data);
-}
+void deleteTexture(TextureData_t *del) { free(del->data); }
 
 glTexture_t pushTextureToGPU(TextureData_t *text) {
 	unsigned int texture_index;
 	glGenTextures(1, &texture_index);
 	glBindTexture(GL_TEXTURE_2D, texture_index);
 	unsigned int pixel_format = GL_RGBA;
-	glTexImage2D(GL_TEXTURE_2D, 0, pixel_format, text->w, text->h, 0, pixel_format, GL_UNSIGNED_BYTE, text->data);
+	glTexImage2D(GL_TEXTURE_2D, 0, pixel_format, text->w, text->h, 0, pixel_format,
+				 GL_UNSIGNED_BYTE, text->data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -90,6 +89,4 @@ glTexture_t pushTextureToGPU(TextureData_t *text) {
 	return (glTexture_t){text->w, text->h, texture_index};
 }
 
-void deleteGlTexture(glTexture_t gltex) {
-	glDeleteTextures(1, &(gltex.index));
-}
+void deleteGlTexture(glTexture_t gltex) { glDeleteTextures(1, &(gltex.index)); }

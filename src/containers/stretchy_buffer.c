@@ -17,7 +17,7 @@ void stretchyBufferPush(void *data, StretchyBuffer_t *sb) {
 	memcpy((char *)sb->buffer + (sb->index_pointer * sb->type_size), data, sb->type_size);
 	sb->index_pointer += 1; // adjust everything after;
 	sb->length += 1;
-	if (sb->length == sb->size) {
+	if(sb->length == sb->size) {
 		sb->size *= 2;
 		sb->buffer = realloc(sb->buffer, sb->type_size * sb->size);
 	}

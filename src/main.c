@@ -28,9 +28,9 @@
 #include "graphics/model.h"
 #include "graphics/renderer.h"
 #include "graphics/sprite.h"
+#include "graphics/text.h"
 #include "graphics/texture.h"
 #include "utils.h"
-#include "graphics/text.h"
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
@@ -43,13 +43,14 @@ int main(int argc, char **argv) {
 	// Gen Level
 	Map_t map;
 	memset(&map, 0, sizeof(Map_t));
-	for (int y = 0; y < MAP_SIZE; ++y) {
-		for (int x = 0; x < MAP_SIZE; ++x) {
-			for (int i = 0; i < 6; ++i) {
+	for(int y = 0; y < MAP_SIZE; ++y) {
+		for(int x = 0; x < MAP_SIZE; ++x) {
+			for(int i = 0; i < 6; ++i) {
 				map.data[MAP_SIZE * y + x].tex_index[i] = rand() % 3;
 			}
-			if (y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 || (y > 4 && y < 8 && x > 4 && x < 8)) {
-				if (!(x == 6 && y < 7)) {
+			if(y == 0 || y == MAP_SIZE - 1 || x == 0 || x == MAP_SIZE - 1 ||
+			   (y > 4 && y < 8 && x > 4 && x < 8)) {
+				if(!(x == 6 && y < 7)) {
 					map.data[MAP_SIZE * y + x].solid = true;
 					map.data[MAP_SIZE * y + x].color.r = rand();
 					map.data[MAP_SIZE * y + x].color.g = rand();
@@ -58,8 +59,6 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
-
-
 
 	TexturedModel_t world = generateLevelGeometry(&map);
 
@@ -84,10 +83,6 @@ int main(int argc, char **argv) {
 	setWindowSize(1280, 720, &render_settings, &render_data);
 	centerWindow(&render_data);
 
-
-	
-
-
 	string_t flat_vert = readTextFile("run_data/flat.v.glsl");
 	string_t flat_frag = readTextFile("run_data/flat.f.glsl");
 
@@ -102,7 +97,8 @@ int main(int argc, char **argv) {
 	unsigned int world_texture_coords_buffer;
 	glGenBuffers(1, &world_texture_coords_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, world_texture_coords_buffer);
-	glBufferData(GL_ARRAY_BUFFER, world.tris * 3 * sizeof(float), world.texture_coordinates, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, world.tris * 3 * sizeof(float), world.texture_coordinates,
+				 GL_STATIC_DRAW);
 
 	unsigned int world_vao;
 	glGenVertexArrays(1, &world_vao);
@@ -157,8 +153,7 @@ int main(int argc, char **argv) {
 
 	float angle = 0;
 
-	bool input[10] = {
-		false, false, false, false, false, false, false, false, false};
+	bool input[10] = {false, false, false, false, false, false, false, false, false};
 
 	billboardSpriteInit();
 	hudSpriteInit();
@@ -172,29 +167,25 @@ int main(int argc, char **argv) {
 
 	bool free_cam = false;
 
-	Entity_t free_cam_entity = {
-		.position = {0, 0},
-		.angle = 0,
-		.radius = .2};
+	Entity_t free_cam_entity = {.position = {0, 0}, .angle = 0, .radius = .2};
 
 	Entity_t *target_entity;
 	vec2 mouse_offset = {0, 0};
 
-
 	string_t test_str = newString("Hello, world!");
-	float fps_value = 0;
-	unsigned long game_start = SDL_GetTicks64();
-	unsigned long frames = 0;
-	while (run) {
+	double fps_value = 0;
+	uint64_t diag_game_start = SDL_GetPerformanceCounter();
+	while(run) {
 		//		float volume = max(0, 255 - glm_vec3_distance(camera, (vec3){0, 0, 0}));
-		//		Mix_SetPanning(0, volume, volume); // since target is at zero, zero, use camera position only
-
+		//		Mix_SetPanning(0, volume, volume); // since target is at zero, zero, use camera
+		//position only
+		uint64_t diag_frame_start = SDL_GetPerformanceCounter();
 		frame_start = SDL_GetTicks64();
 		i += .001;
-		while (SDL_PollEvent(&ev) != 0) {
-			switch (ev.type) {
+		while(SDL_PollEvent(&ev) != 0) {
+			switch(ev.type) {
 			case SDL_WINDOWEVENT:
-				switch (ev.window.event) {
+				switch(ev.window.event) {
 				case SDL_WINDOWEVENT_RESIZED:
 					setWindowSize(ev.window.data1, ev.window.data2, &render_settings, &render_data);
 					break;
@@ -208,10 +199,10 @@ int main(int argc, char **argv) {
 				mouse_offset[1] += ev.motion.yrel;
 				break;
 			case SDL_KEYDOWN:
-				if (ev.key.repeat) {
+				if(ev.key.repeat) {
 					break;
 				}
-				switch (ev.key.keysym.sym) {
+				switch(ev.key.keysym.sym) {
 				case SDLK_w:
 					input[0] = true;
 					break;
@@ -251,7 +242,7 @@ int main(int argc, char **argv) {
 				case SDLK_j:
 					input[9] = true;
 					{
-						if (!free_cam) {
+						if(!free_cam) {
 							glm_vec2_copy(player.position, free_cam_entity.position);
 							player.angle = player.angle;
 							free_cam = true;
@@ -264,7 +255,7 @@ int main(int argc, char **argv) {
 
 				break;
 			case SDL_KEYUP: {
-				switch (ev.key.keysym.sym) {
+				switch(ev.key.keysym.sym) {
 				case SDLK_w:
 					input[0] = false;
 					break;
@@ -300,60 +291,62 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		while (accumulated_frame_time > 16) {
+		while(accumulated_frame_time > 16) {
 			float mouse_sensitivity = 0.1f;
 			float mouse_delta = mouse_sensitivity * delta * mouse_offset[0];
 			//			entityWalkForward(&ss_officer, &map, .5 * delta);
 			entityWalkTowardsPoint(&ss_officer, &map, .5 * delta, player.position);
-			if (bullet_shot) {
+			if(bullet_shot) {
 				entityWalkForward(&bullet_entity, &map, .5 * delta);
 			}
 			//			printf("INPUT\n");
-			if (!free_cam) {
-				if (input[0]) {
+			if(!free_cam) {
+				if(input[0]) {
 					entityWalk(&player, &map, speed * delta, player.angle);
 				}
 
-				if (input[1]) {
+				if(input[1]) {
 					entityWalk(&player, &map, speed * delta, player.angle + M_PI);
 				}
 
-				if (input[2]) {
+				if(input[2]) {
 					entityWalk(&player, &map, speed * delta, player.angle + M_PI_2);
 				}
 
-				if (input[3]) {
+				if(input[3]) {
 					entityWalk(&player, &map, speed * delta, player.angle - M_PI_2);
 				}
 
 				player.angle += mouse_delta;
 
-				if (input[4]) {
+				if(input[4]) {
 					player.angle += 1 * delta;
 				}
-				if (input[5]) {
+				if(input[5]) {
 					player.angle -= 1 * delta;
 				}
 			} else {
-				if (input[0]) {
+				if(input[0]) {
 					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle);
 				}
-				if (input[1]) {
+				if(input[1]) {
 					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle + M_PI);
 				}
 
-				if (input[2]) {
-					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle + M_PI_2);
+				if(input[2]) {
+					entityMove(&free_cam_entity, &map, speed * delta,
+							   free_cam_entity.angle + M_PI_2);
 				}
 
-				if (input[3]) {
-					entityMove(&free_cam_entity, &map, speed * delta, free_cam_entity.angle - M_PI_2);
+				if(input[3]) {
+					entityMove(&free_cam_entity, &map, speed * delta,
+							   free_cam_entity.angle - M_PI_2);
 				}
 
-				if (input[4]) {
+				if(input[4]) {
 					free_cam_entity.angle += 1 * delta;
 				}
-				if (input[5]) {
+				if(input[5]) {
 					free_cam_entity.angle -= 1 * delta;
 				}
 				free_cam_entity.angle += mouse_delta;
@@ -367,7 +360,7 @@ int main(int argc, char **argv) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		float camera_angle = 0.0f;
-		if (free_cam) {
+		if(free_cam) {
 			camera_position[0] = -free_cam_entity.position[0] * world_scale;
 			camera_position[2] = -free_cam_entity.position[1] * world_scale;
 			camera_angle = free_cam_entity.angle;
@@ -381,34 +374,47 @@ int main(int argc, char **argv) {
 		glm_rotate(render_data.camera, -camera_angle - M_PI_2, (vec3){0, -1, 0});
 		glm_translate(render_data.camera, camera_position);
 
-		drawSpriteBillboard(bullet, &render_data, bullet_entity.position[0] * world_scale, world_scale / 2.0f, bullet_entity.position[1] * world_scale); // TODO: scale here as well
+		drawSpriteBillboard(bullet, &render_data, bullet_entity.position[0] * world_scale,
+							world_scale / 2.0f,
+							bullet_entity.position[1] * world_scale); // TODO: scale here as well
 
-		drawSpriteBillboard(ss, &render_data, ss_officer.position[0] * world_scale, world_scale / 2.0f, ss_officer.position[1] * world_scale); // TODO: scale here as well
+		drawSpriteBillboard(ss, &render_data, ss_officer.position[0] * world_scale,
+							world_scale / 2.0f,
+							ss_officer.position[1] * world_scale); // TODO: scale here as well
 
 		mat4 model;
 		glm_mat4_identity(model);
 		//  these values need to be the same
-		glm_scale(model, (vec3){world_scale, world_scale, world_scale}); // TODO: pull scale from a global variable -> stored in sprite.c as well
+		glm_scale(model, (vec3){world_scale, world_scale,
+								world_scale}); // TODO: pull scale from a global variable -> stored
+											   // in sprite.c as well
 		glm_translate(model, (vec3){0, 0, 0});
 
 		glBindTexture(GL_TEXTURE_2D, sam.index);
 
 		glBindVertexArray(world_vao);
 		glUseProgram(flat_shader.gl_program);
-		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "view"), 1, GL_FALSE, render_data.camera);
-		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "projection"), 1, GL_FALSE, render_data.projection);
-		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "model"), 1, GL_FALSE, model);
+		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "view"), 1, GL_FALSE,
+						   render_data.camera);
+		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "projection"), 1, GL_FALSE,
+						   render_data.projection);
+		glUniformMatrix4fv(glGetUniformLocation(flat_shader.gl_program, "model"), 1, GL_FALSE,
+						   model);
 
 		glDrawArrays(GL_TRIANGLES, 0, world.tris);
 
-		if (!free_cam) {
-			drawSpriteHud(gun_real, &render_data, render_settings.window_w / 2 - (render_settings.window_h / 2), 0, render_settings.window_h, render_settings.window_h);
+		if(!free_cam) {
+			drawSpriteHud(gun_real, &render_data,
+						  render_settings.window_w / 2 - (render_settings.window_h / 2), 0,
+						  render_settings.window_h, render_settings.window_h);
 		} else {
-			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale, world_scale / 2.0f, player.position[1] * world_scale); // TODO: scale here as well
+			drawSpriteBillboard(sam_real, &render_data, player.position[0] * world_scale,
+								world_scale / 2.0f,
+								player.position[1] * world_scale); // TODO: scale here as well
 		}
 
-		char fps[20];
-		sprintf(fps, "%.5f", fps_value);
+		char fps[40];
+		sprintf(fps, "FRAMETIME: %.20fms", fps_value);
 		clearString(&test_str);
 		appendCStringToString(fps, &test_str);
 
@@ -418,9 +424,10 @@ int main(int argc, char **argv) {
 
 		frame_end = SDL_GetTicks64();
 		accumulated_frame_time += frame_end - frame_start;
-		frames += 1;
+		uint64_t diag_frame_end = SDL_GetPerformanceCounter();
 
-		fps_value = frames / ((SDL_GetTicks64() - game_start) / 1000.0f);
+		fps_value =
+			(double)(diag_frame_end - diag_frame_start) / (SDL_GetPerformanceFrequency() / 1000.0);
 	}
 
 	SDL_Quit();

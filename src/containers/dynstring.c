@@ -38,7 +38,7 @@ void resizeStringBuffer(string_t *const str, size_t size) {
 }
 
 void growStringBuffer(string_t *const str, const size_t size) {
-	if (str->buffer_size >= size) {
+	if(str->buffer_size >= size) {
 		return;
 	} else {
 		resizeStringBuffer(str, size);

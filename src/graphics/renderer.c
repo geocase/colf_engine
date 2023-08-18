@@ -20,7 +20,8 @@ void initRenderer(RenderData_t *data) {
 	glm_mat4_identity(data->projection);
 	glm_mat4_identity(data->ortho);
 	glm_mat4_identity(data->camera);
-	data->window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 10, 10, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	data->window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 10, 10,
+									SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -30,7 +31,7 @@ void initRenderer(RenderData_t *data) {
 	data->context = SDL_GL_CreateContext(data->window);
 	SDL_GL_MakeCurrent(data->window, data->context);
 #ifndef __APPLE__
-	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+	if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
 		exit(-1);
 	}
 #endif
@@ -38,7 +39,7 @@ void initRenderer(RenderData_t *data) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	SDL_GL_SetSwapInterval(1);
+	// SDL_GL_SetSwapInterval(1);
 
 	return;
 }

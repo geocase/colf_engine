@@ -27,35 +27,15 @@ void billboardSpriteInit() {
 	compileShaderGL(&bb_fs, &bb_vs, &billboard_shader);
 
 	float vertices[] = {
-		-1.0f,
-		1.0f,
-		1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
+		-1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f,
 
-		-1.0f,
-		1.0f,
-		1.0f,
-		1.0f,
-		1.0f,
-		-1.0f,
+		-1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  -1.0f,
 	};
 
 	float tex_coords[] = {
-		0.0f,
-		1.0f,
-		1.0f,
-		0.0f,
-		0.0f,
-		0.0f,
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
 
-		0.0f,
-		1.0f,
-		1.0f,
-		1.0f,
-		1.0f,
-		0.0f,
+		0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 	};
 	// convert this to a model
 	unsigned int vert_buffer;
@@ -82,16 +62,20 @@ void billboardSpriteInit() {
 	return;
 }
 
-void drawSpriteBillboard(glTexture_t texture, RenderData_t *render_data, float x, float y, float z) {
+void drawSpriteBillboard(glTexture_t texture, RenderData_t *render_data, float x, float y,
+						 float z) {
 	mat4 model;
 	float scale = 1.0f; // TODO: this should be stored as a global variable or something
 	glm_mat4_identity(model);
 	glm_translate(model, (vec3){x, y, z});
 	glm_scale(model, (vec3){scale / 2, scale / 2, scale / 2});
 	glUseProgram(billboard_shader.gl_program);
-	glUniformMatrix4fv(glGetUniformLocation(billboard_shader.gl_program, "model"), 1, GL_FALSE, model);
-	glUniformMatrix4fv(glGetUniformLocation(billboard_shader.gl_program, "view"), 1, GL_FALSE, render_data->camera);
-	glUniformMatrix4fv(glGetUniformLocation(billboard_shader.gl_program, "projection"), 1, GL_FALSE, render_data->projection);
+	glUniformMatrix4fv(glGetUniformLocation(billboard_shader.gl_program, "model"), 1, GL_FALSE,
+					   model);
+	glUniformMatrix4fv(glGetUniformLocation(billboard_shader.gl_program, "view"), 1, GL_FALSE,
+					   render_data->camera);
+	glUniformMatrix4fv(glGetUniformLocation(billboard_shader.gl_program, "projection"), 1, GL_FALSE,
+					   render_data->projection);
 	glBindTexture(GL_TEXTURE_2D, texture.index);
 
 	glBindVertexArray(billboard_vao);
@@ -103,43 +87,31 @@ void hudSpriteInit() {
 	string_t hud_vs = readTextFile("run_data/hud.v.glsl");
 	compileShaderGL(&hud_fs, &hud_vs, &hud_shader);
 	float vertices[] = {
-		0.0f,
-		0.0f,
+		0.0f, 0.0f,
 
-		1.0f,
-		0.0f,
+		1.0f, 0.0f,
 
-		0.0f,
-		1.0f,
+		0.0f, 1.0f,
 
-		1.0f,
-		1.0f,
+		1.0f, 1.0f,
 
-		0.0f,
-		1.0f,
+		0.0f, 1.0f,
 
-		1.0f,
-		0.0f,
+		1.0f, 0.0f,
 	};
 
 	float tex_coords[] = {
-		0.0f,
-		1.0f,
+		0.0f, 1.0f,
 
-		1.0f,
-		1.0f,
+		1.0f, 1.0f,
 
-		0.0f,
-		0.0f,
+		0.0f, 0.0f,
 
-		1.0f,
-		0.0f,
+		1.0f, 0.0f,
 
-		0.0f,
-		0.0f,
+		0.0f, 0.0f,
 
-		1.0f,
-		1.0f,
+		1.0f, 1.0f,
 	};
 	// snip
 	unsigned int vert_buffer;
@@ -164,7 +136,8 @@ void hudSpriteInit() {
 	glEnableVertexAttribArray(1);
 }
 
-void drawSpriteHud(glTexture_t texture, RenderData_t *render_data, float x, float y, float w, float h) {
+void drawSpriteHud(glTexture_t texture, RenderData_t *render_data, float x, float y, float w,
+				   float h) {
 	mat4 model;
 	glm_mat4_identity(model);
 	glm_translate(model, (vec3){x, y, 0});
@@ -173,7 +146,8 @@ void drawSpriteHud(glTexture_t texture, RenderData_t *render_data, float x, floa
 
 	glUseProgram(hud_shader.gl_program);
 	glUniformMatrix4fv(glGetUniformLocation(hud_shader.gl_program, "model"), 1, GL_FALSE, model);
-	glUniformMatrix4fv(glGetUniformLocation(hud_shader.gl_program, "orthographic"), 1, GL_FALSE, render_data->ortho);
+	glUniformMatrix4fv(glGetUniformLocation(hud_shader.gl_program, "orthographic"), 1, GL_FALSE,
+					   render_data->ortho);
 	glBindTexture(GL_TEXTURE_2D, texture.index);
 	// this should always be drawn last
 	glDisable(GL_DEPTH_TEST);

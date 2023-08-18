@@ -12,21 +12,23 @@ bool entityCollideAndSlide(Entity_t *entity, Map_t *map, float angle, float dist
 	float x_delta = cosf(angle) * distance;
 	float y_delta = sinf(angle) * distance;
 	// slow
-	vec2 new_position = {entity->position[0] + x_delta,
-						 entity->position[1] + y_delta};
+	vec2 new_position = {entity->position[0] + x_delta, entity->position[1] + y_delta};
 
-	for (int map_y = max((int)new_position[1] - 2, 0); map_y < min((int)new_position[1] + 2, MAP_SIZE); ++map_y) {
-		for (int map_x = max((int)new_position[0] - 2, 0); map_x < min((int)new_position[0] + 2, MAP_SIZE); ++map_x) {
-			if (map->data[MAP_SIZE * map_y + map_x].solid) {
+	for(int map_y = max((int)new_position[1] - 2, 0);
+		map_y < min((int)new_position[1] + 2, MAP_SIZE); ++map_y) {
+		for(int map_x = max((int)new_position[0] - 2, 0);
+			map_x < min((int)new_position[0] + 2, MAP_SIZE); ++map_x) {
+			if(map->data[MAP_SIZE * map_y + map_x].solid) {
 				float nx = glm_clamp(new_position[0], map_x, map_x + 1);
 				float ny = glm_clamp(new_position[1], map_y, map_y + 1);
 				vec2 ray_nearest = {nx - new_position[0], ny - new_position[1]};
-				float magnitude = sqrtf(ray_nearest[0] * ray_nearest[0] + ray_nearest[1] * ray_nearest[1]);
+				float magnitude =
+					sqrtf(ray_nearest[0] * ray_nearest[0] + ray_nearest[1] * ray_nearest[1]);
 				float overlap = entity->radius - magnitude;
 
-				if (isnan(overlap) || isinf(overlap))
+				if(isnan(overlap) || isinf(overlap))
 					overlap = 0;
-				if (overlap > 0) {
+				if(overlap > 0) {
 					glm_vec2_normalize(ray_nearest);
 					new_position[0] -= ray_nearest[0] * overlap;
 					new_position[1] -= ray_nearest[1] * overlap;
